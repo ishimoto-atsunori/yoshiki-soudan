@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理画面｜よしきの相談室</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: #F5F0E8;
+    min-height: 100vh;
+    padding: 1.25rem 1rem;
+  }
+  .header {
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-title { font-size: 16px; font-weight: 600; color: #3D2E1E; }
+  .header-sub { font-size: 12px; color: #7A6A56; margin-top: 2px; }
+  .stats {
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 0.875rem 0.5rem;
+    text-align: center;
+    border: 1px solid #E0D5C5;
+  }
+  .stat-num { font-size: 26px; font-weight: 600; color: #3D2E1E; }
+  .stat-label { font-size: 11px; color: #7A6A56; margin-top: 3px; }
+  .filters {
+    max-width: 900px;
+    margin: 0 auto 1rem;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid #D0C4B0;
+    background: #fff;
+    font-size: 13px;
+    color: #7A6A56;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .filter-btn.active {
+    background: #8B6F47;
+    color: #FAF7F2;
+    border-color: #8B6F47;
+  }
+  .grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 860px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .q-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 1.125rem;
+    border: 1px solid #E0D5C5;
+    border-left: 4px solid #C8B99A;
+    transition: box-shadow 0.15s;
+  }
+  .q-card.answered { border-left-color: #A8C5A0; }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .badge.answered { background: #EAF3DE; color: #3B6D11; }
+  .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
+  .q-text {
+    font-size: 15px;
+    color: #3D2E1E;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    word-break: break-all;
+  }
+  .q-time { font-size: 11px; color: #B0A090; margin-bottom: 12px; }
+  .card-actions { display: flex; gap: 8px; }
+  .action-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 8px;
+    border: 1px solid #D0C4B0;
+    background: #FAF7F2;
+    font-size: 13px;
+    color: #7A6A56;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .action-btn:active { opacity: 0.7; }
+  .action-btn.primary {
+    background: #8B6F47;
+    color: #FAF7F2;
+    border-color: #8B6F47;
+  }
+  .reload-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #D0C4B0;
+    background: #fff;
+    font-size: 13px;
+    color: #7A6A56;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .empty { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; grid-column: 1/-1; }
+  .loading { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; grid-column: 1/-1; }
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    background: #3D2E1E; color: #FAF7F2;
+    padding: 10px 20px; border-radius: 20px;
+    font-size: 13px; display: none;
+    z-index: 100;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">管理画面｜よしきの相談室</div>
+    <div class="header-sub">質問の確認・ステータス管理</div>
+  </div>
+  <button class="reload-btn" onclick="loadQuestions()">更新</button>
+</div>
+
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-num" id="total-count">-</div>
+    <div class="stat-label">合計</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" id="unanswered-count" style="color:#8B5E00;">-</div>
+    <div class="stat-label">未回答</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" id="answered-count" style="color:#3B6D11;">-</div>
+    <div class="stat-label">回答済み</div>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('all', this)">すべて</button>
+  <button class="filter-btn" onclick="setFilter('unanswered', this)">未回答</button>
+  <button class="filter-btn" onclick="setFilter('answered', this)">回答済み</button>
+</div>
+
+<div class="grid" id="q-grid">
+  <div class="loading">読み込み中...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbwfEQz_rwzxYGu85xuTTecPYvwb76Je3Hg1RkUrGbejH7JPNxZfqQ1tO2n4Hctp7BDMEg/exec';
+var allData = [];
+var currentFilter = 'all';
+var statusMap = {};
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 2000);
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderCards();
+}
+
+function timeAgo(dateStr) {
+  var now = new Date();
+  var d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  var diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return 'たった今';
+  if (diff < 3600) return Math.floor(diff / 60) + '分前';
+  if (diff < 86400) return Math.floor(diff / 3600) + '時間前';
+  return Math.floor(diff / 86400) + '日前';
+}
+
+function toggleStatus(idx) {
+  var current = statusMap[idx] || allData[idx].status;
+  statusMap[idx] = (current === '回答済み') ? '未回答' : '回答済み';
+  renderCards();
+  showToast(statusMap[idx] === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
+}
+
+function copyText(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() { showToast('コピーしました'); });
+  } else {
+    var el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('コピーしました');
+  }
+}
+
+function renderCards() {
+  var grid = document.getElementById('q-grid');
+  var filtered = allData.filter(function(q, i) {
+    var status = statusMap[i] || q.status;
+    if (currentFilter === 'unanswered') return status !== '回答済み';
+    if (currentFilter === 'answered') return status === '回答済み';
+    return true;
+  });
+
+  var unanswered = allData.filter(function(q, i) {
+    return (statusMap[i] || q.status) !== '回答済み';
+  }).length;
+  var answered = allData.length - unanswered;
+
+  document.getElementById('total-count').textContent = allData.length;
+  document.getElementById('unanswered-count').textContent = unanswered;
+  document.getElementById('answered-count').textContent = answered;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">該当する質問はありません</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(q) {
+    var realIdx = allData.indexOf(q);
+    var status = statusMap[realIdx] || q.status;
+    var isAnswered = status === '回答済み';
+    return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">' +
+      '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + status + '</div>' +
+      '<div class="q-text">' + q.question + '</div>' +
+      '<div class="q-time">' + timeAgo(q.time) + '</div>' +
+      '<div class="card-actions">' +
+      '<button class="action-btn" onclick="copyText(\'' + q.question.replace(/'/g, "\\'") + '\')">コピー</button>' +
+      '<button class="action-btn primary" onclick="toggleStatus(' + realIdx + ')">' +
+      (isAnswered ? '未回答に戻す' : '回答済みにする') +
+      '</button>' +
+      '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function loadQuestions() {
+  document.getElementById('q-grid').innerHTML = '<div class="loading">読み込み中...</div>';
+  fetch(GAS_URL)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      allData = data || [];
+      statusMap = {};
+      renderCards();
+    })
+    .catch(function() {
+      document.getElementById('q-grid').innerHTML = '<div class="empty">読み込みに失敗しました。更新ボタンを押してください。</div>';
+    });
+}
+
+loadQuestions();
+</script>
+</body>
+</html>
