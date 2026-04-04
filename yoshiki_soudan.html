@@ -59,14 +59,15 @@
   }
   .submit-btn:hover { background: #7A6040; }
   .submit-btn:active { transform: scale(0.98); }
-  .submit-btn:disabled { background: #D0C4B0; cursor: not-allowed; }
+  .submit-btn:disabled { background: #D0C4B0; cursor: not-allowed; color: #FAF7F2; }
   .recent-section { margin-top: 1.5rem; }
-  .section-title { font-size: 13px; color: #7A6A56; margin-bottom: 10px; font-weight: 600; }
+  .section-title { font-size: 13px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
+  .section-sub { font-size: 11px; color: #B0A090; margin-bottom: 10px; }
   .q-item {
     background: #fff;
     border-radius: 10px; padding: 12px 14px;
     margin-bottom: 8px;
-    border-left: 3px solid #C8B99A;
+    border-left: 3px solid #A8C5A0;
   }
   .q-text { font-size: 14px; color: #3D2E1E; line-height: 1.6; }
   .q-time { font-size: 11px; color: #B0A090; margin-top: 4px; }
@@ -103,14 +104,16 @@
   <div id="form-view">
     <div class="card">
       <div class="card-label">質問・相談内容</div>
-      <textarea id="q-input" placeholder="ネットショップのこと、副業のこと、なんでもどうぞ。匿名で送れます。" maxlength="300" oninput="updateCount()"></textarea>
+      <textarea id="q-input" placeholder="ネットショップのこと、プライベートのこと、なんでもどうぞ。匿名で送れます。" maxlength="300" oninput="updateCount()"></textarea>
       <div class="char-count"><span id="char-num">0</span> / 300</div>
       <div class="divider"></div>
       <div class="hint">名前の入力は不要です。匿名で送信されます。</div>
     </div>
     <button class="submit-btn" id="submit-btn" onclick="submitQuestion()" disabled>送信する</button>
+
     <div class="recent-section">
       <div class="section-title">最近届いた質問</div>
+      <div class="section-sub">回答済みの質問を表示しています</div>
       <div id="q-list"><div class="empty-msg">読み込み中...</div></div>
     </div>
   </div>
@@ -148,7 +151,7 @@ function submitQuestion() {
   var url = GAS_URL + '?question=' + encodeURIComponent(val);
   var img = new Image();
   img.src = url;
-  
+
   setTimeout(function() {
     document.getElementById('form-view').style.display = 'none';
     document.getElementById('success-view').style.display = 'block';
@@ -177,34 +180,24 @@ function timeAgo(dateStr) {
 }
 
 function loadQuestions() {
-  var script = document.createElement('script');
-  window._gasCallback = function(data) {
-    var list = document.getElementById('q-list');
-    if (!data || data.length === 0) {
-      list.innerHTML = '<div class="empty-msg">まだ質問はありません</div>';
-      return;
-    }
-    var recent = data.slice(-5).reverse();
-    list.innerHTML = recent.map(function(q) {
-      return '<div class="q-item"><div class="q-text">' + q.question + '</div><div class="q-time">' + timeAgo(q.time) + '</div></div>';
-    }).join('');
-  };
-  
   fetch(GAS_URL)
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var list = document.getElementById('q-list');
-      if (!data || data.length === 0) {
-        list.innerHTML = '<div class="empty-msg">まだ質問はありません</div>';
+      var answered = (data || []).filter(function(q) {
+        return q.status === '回答済み';
+      });
+      if (answered.length === 0) {
+        list.innerHTML = '<div class="empty-msg">まだ回答済みの質問はありません</div>';
         return;
       }
-      var recent = data.slice(-5).reverse();
+      var recent = answered.slice(-5).reverse();
       list.innerHTML = recent.map(function(q) {
         return '<div class="q-item"><div class="q-text">' + q.question + '</div><div class="q-time">' + timeAgo(q.time) + '</div></div>';
       }).join('');
     })
     .catch(function() {
-      document.getElementById('q-list').innerHTML = '<div class="empty-msg">まだ質問はありません</div>';
+      document.getElementById('q-list').innerHTML = '<div class="empty-msg">読み込みに失敗しました</div>';
     });
 }
 
