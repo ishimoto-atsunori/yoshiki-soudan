@@ -59,11 +59,7 @@
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .filter-btn.active {
-    background: #8B6F47;
-    color: #FAF7F2;
-    border-color: #8B6F47;
-  }
+  .filter-btn.active { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
   .grid {
     max-width: 900px;
     margin: 0 auto;
@@ -71,12 +67,8 @@
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  @media (min-width: 600px) {
-    .grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 860px) {
-    .grid { grid-template-columns: repeat(3, 1fr); }
-  }
+  @media (min-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 860px) { .grid { grid-template-columns: repeat(3, 1fr); } }
   .q-card {
     background: #fff;
     border-radius: 14px;
@@ -96,35 +88,28 @@
   }
   .badge.answered { background: #EAF3DE; color: #3B6D11; }
   .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
-  .q-text {
-    font-size: 15px;
-    color: #3D2E1E;
-    line-height: 1.7;
-    margin-bottom: 10px;
-    word-break: break-all;
-  }
+  .q-text { font-size: 15px; color: #3D2E1E; line-height: 1.7; margin-bottom: 10px; word-break: break-all; }
   .q-time { font-size: 11px; color: #B0A090; margin-bottom: 12px; }
-  .card-actions { display: flex; gap: 8px; }
+  .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
   .action-btn {
     flex: 1;
-    padding: 10px 8px;
+    padding: 10px 6px;
     border-radius: 8px;
     border: 1px solid #D0C4B0;
     background: #FAF7F2;
-    font-size: 13px;
+    font-size: 12px;
     color: #7A6A56;
     cursor: pointer;
     font-family: inherit;
     transition: all 0.15s;
     text-align: center;
     -webkit-tap-highlight-color: transparent;
+    min-width: 60px;
   }
   .action-btn:active { opacity: 0.7; }
-  .action-btn.primary {
-    background: #8B6F47;
-    color: #FAF7F2;
-    border-color: #8B6F47;
-  }
+  .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
+  .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0A090; }
+  .action-btn.danger:active { background: #FEF0EE; }
   .reload-btn {
     padding: 8px 16px;
     border-radius: 8px;
@@ -134,7 +119,6 @@
     color: #7A6A56;
     cursor: pointer;
     font-family: inherit;
-    -webkit-tap-highlight-color: transparent;
   }
   .empty { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; grid-column: 1/-1; }
   .loading { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; grid-column: 1/-1; }
@@ -143,9 +127,27 @@
     background: #3D2E1E; color: #FAF7F2;
     padding: 10px 20px; border-radius: 20px;
     font-size: 13px; display: none;
-    z-index: 100;
-    white-space: nowrap;
+    z-index: 100; white-space: nowrap;
   }
+  .confirm-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200;
+  }
+  .confirm-box {
+    background: #fff; border-radius: 16px; padding: 1.5rem;
+    max-width: 320px; width: 90%; text-align: center;
+  }
+  .confirm-title { font-size: 16px; font-weight: 600; color: #3D2E1E; margin-bottom: 8px; }
+  .confirm-text { font-size: 13px; color: #7A6A56; margin-bottom: 1.25rem; line-height: 1.6; }
+  .confirm-actions { display: flex; gap: 8px; }
+  .confirm-btn {
+    flex: 1; padding: 12px; border-radius: 10px; border: none;
+    font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .confirm-btn.cancel { background: #F5F0E8; color: #7A6A56; }
+  .confirm-btn.delete { background: #C0392B; color: #fff; }
 </style>
 </head>
 <body>
@@ -185,11 +187,23 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title">質問を削除しますか？</div>
+    <div class="confirm-text" id="confirm-text"></div>
+    <div class="confirm-actions">
+      <button class="confirm-btn cancel" onclick="closeConfirm()">キャンセル</button>
+      <button class="confirm-btn delete" onclick="executeDelete()">削除する</button>
+    </div>
+  </div>
+</div>
+
 <script>
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwfEQz_rwzxYGu85xuTTecPYvwb76Je3Hg1RkUrGbejH7JPNxZfqQ1tO2n4Hctp7BDMEg/exec';
 var allData = [];
 var currentFilter = 'all';
 var statusMap = {};
+var deleteTargetRow = null;
 
 function showToast(msg) {
   var t = document.getElementById('toast');
@@ -237,6 +251,32 @@ function copyText(text) {
   }
 }
 
+function confirmDelete(row, questionText) {
+  deleteTargetRow = row;
+  var short = questionText.length > 30 ? questionText.slice(0, 30) + '…' : questionText;
+  document.getElementById('confirm-text').textContent = '「' + short + '」を削除します。この操作は元に戻せません。';
+  document.getElementById('confirm-overlay').style.display = 'flex';
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').style.display = 'none';
+  deleteTargetRow = null;
+}
+
+function executeDelete() {
+  if (!deleteTargetRow) return;
+  var row = deleteTargetRow;
+  closeConfirm();
+  fetch(GAS_URL + '?action=delete&row=' + row)
+    .then(function() {
+      showToast('削除しました');
+      setTimeout(loadQuestions, 500);
+    })
+    .catch(function() {
+      showToast('削除に失敗しました');
+    });
+}
+
 function renderCards() {
   var grid = document.getElementById('q-grid');
   var filtered = allData.filter(function(q, i) {
@@ -264,15 +304,17 @@ function renderCards() {
     var realIdx = allData.indexOf(q);
     var status = statusMap[realIdx] || q.status;
     var isAnswered = status === '回答済み';
+    var safeQ = q.question.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">' +
       '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + status + '</div>' +
       '<div class="q-text">' + q.question + '</div>' +
       '<div class="q-time">' + timeAgo(q.time) + '</div>' +
       '<div class="card-actions">' +
-      '<button class="action-btn" onclick="copyText(\'' + q.question.replace(/'/g, "\\'") + '\')">コピー</button>' +
+      '<button class="action-btn" onclick="copyText(\'' + safeQ + '\')">コピー</button>' +
       '<button class="action-btn primary" onclick="toggleStatus(' + realIdx + ')">' +
       (isAnswered ? '未回答に戻す' : '回答済みにする') +
       '</button>' +
+      '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', \'' + safeQ + '\')">削除</button>' +
       '</div>' +
       '</div>';
   }).join('');
