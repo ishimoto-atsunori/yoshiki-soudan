@@ -59,7 +59,11 @@
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
-  .filter-btn.active { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
+  .filter-btn.active {
+    background: #8B6F47;
+    color: #FAF7F2;
+    border-color: #8B6F47;
+  }
   .grid {
     max-width: 900px;
     margin: 0 auto;
@@ -67,8 +71,12 @@
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  @media (min-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 860px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 860px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
   .q-card {
     background: #fff;
     border-radius: 14px;
@@ -88,12 +96,40 @@
   }
   .badge.answered { background: #EAF3DE; color: #3B6D11; }
   .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
-  .q-text { font-size: 15px; color: #3D2E1E; line-height: 1.7; margin-bottom: 10px; word-break: break-all; }
+  .q-text {
+    font-size: 15px;
+    color: #3D2E1E;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    word-break: break-all;
+  }
   .q-time { font-size: 11px; color: #B0A090; margin-bottom: 12px; }
+  .draft-box {
+    background: #F5F0E8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-left: 3px solid #C8B99A;
+  }
+  .draft-label {
+    font-size: 10px;
+    color: #8B6F47;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .draft-text {
+    font-size: 13px;
+    color: #5A4A3A;
+    line-height: 1.7;
+    word-break: break-all;
+  }
   .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
   .action-btn {
     flex: 1;
-    padding: 10px 6px;
+    padding: 10px 8px;
     border-radius: 8px;
     border: 1px solid #D0C4B0;
     background: #FAF7F2;
@@ -107,9 +143,21 @@
     min-width: 60px;
   }
   .action-btn:active { opacity: 0.7; }
-  .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
-  .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0A090; }
-  .action-btn.danger:active { background: #FEF0EE; }
+  .action-btn.primary {
+    background: #8B6F47;
+    color: #FAF7F2;
+    border-color: #8B6F47;
+  }
+  .action-btn.danger {
+    background: #fff;
+    color: #C0392B;
+    border-color: #E0C4C0;
+  }
+  .action-btn.draft-copy {
+    background: #F0EBE3;
+    color: #8B6F47;
+    border-color: #D0C4B0;
+  }
   .reload-btn {
     padding: 8px 16px;
     border-radius: 8px;
@@ -127,7 +175,8 @@
     background: #3D2E1E; color: #FAF7F2;
     padding: 10px 20px; border-radius: 20px;
     font-size: 13px; display: none;
-    z-index: 100; white-space: nowrap;
+    z-index: 100;
+    white-space: nowrap;
   }
   .confirm-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -135,16 +184,23 @@
     display: none; align-items: center; justify-content: center;
     z-index: 200;
   }
+  .confirm-overlay.show { display: flex; }
   .confirm-box {
-    background: #fff; border-radius: 16px; padding: 1.5rem;
-    max-width: 320px; width: 90%; text-align: center;
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
   }
   .confirm-title { font-size: 16px; font-weight: 600; color: #3D2E1E; margin-bottom: 8px; }
-  .confirm-text { font-size: 13px; color: #7A6A56; margin-bottom: 1.25rem; line-height: 1.6; }
+  .confirm-sub { font-size: 13px; color: #7A6A56; margin-bottom: 1.5rem; line-height: 1.6; }
   .confirm-actions { display: flex; gap: 8px; }
   .confirm-btn {
-    flex: 1; padding: 12px; border-radius: 10px; border: none;
-    font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+    flex: 1; padding: 12px;
+    border-radius: 8px; border: none;
+    font-size: 14px; font-family: inherit;
+    cursor: pointer; font-weight: 600;
   }
   .confirm-btn.cancel { background: #F5F0E8; color: #7A6A56; }
   .confirm-btn.delete { background: #C0392B; color: #fff; }
@@ -190,7 +246,7 @@
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
     <div class="confirm-title">質問を削除しますか？</div>
-    <div class="confirm-text" id="confirm-text"></div>
+    <div class="confirm-sub" id="confirm-text"></div>
     <div class="confirm-actions">
       <button class="confirm-btn cancel" onclick="closeConfirm()">キャンセル</button>
       <button class="confirm-btn delete" onclick="executeDelete()">削除する</button>
@@ -203,7 +259,8 @@ var GAS_URL = 'https://script.google.com/macros/s/AKfycbwfEQz_rwzxYGu85xuTTecPYv
 var allData = [];
 var currentFilter = 'all';
 var statusMap = {};
-var deleteTargetRow = null;
+var pendingDeleteRow = null;
+var pendingDeleteIdx = null;
 
 function showToast(msg) {
   var t = document.getElementById('toast');
@@ -251,30 +308,45 @@ function copyText(text) {
   }
 }
 
-function confirmDelete(row, questionText) {
-  deleteTargetRow = row;
-  var short = questionText.length > 30 ? questionText.slice(0, 30) + '…' : questionText;
-  document.getElementById('confirm-text').textContent = '「' + short + '」を削除します。この操作は元に戻せません。';
-  document.getElementById('confirm-overlay').style.display = 'flex';
+function confirmDelete(row, idx, questionText) {
+  pendingDeleteRow = row;
+  pendingDeleteIdx = idx;
+  document.getElementById('confirm-text').textContent = questionText.length > 40 ? questionText.slice(0, 40) + '...' : questionText;
+  document.getElementById('confirm-overlay').classList.add('show');
 }
 
 function closeConfirm() {
-  document.getElementById('confirm-overlay').style.display = 'none';
-  deleteTargetRow = null;
+  document.getElementById('confirm-overlay').classList.remove('show');
+  pendingDeleteRow = null;
+  pendingDeleteIdx = null;
 }
 
 function executeDelete() {
-  if (!deleteTargetRow) return;
-  var row = deleteTargetRow;
+  if (pendingDeleteRow === null) return;
+  var row = pendingDeleteRow;
+  var idx = pendingDeleteIdx;
   closeConfirm();
+
   fetch(GAS_URL + '?action=delete&row=' + row)
     .then(function() {
+      allData.splice(idx, 1);
+      var newStatusMap = {};
+      Object.keys(statusMap).forEach(function(k) {
+        var ki = parseInt(k);
+        if (ki < idx) newStatusMap[ki] = statusMap[k];
+        else if (ki > idx) newStatusMap[ki - 1] = statusMap[k];
+      });
+      statusMap = newStatusMap;
+      renderCards();
       showToast('削除しました');
-      setTimeout(loadQuestions, 500);
     })
     .catch(function() {
       showToast('削除に失敗しました');
     });
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
 function renderCards() {
@@ -304,17 +376,25 @@ function renderCards() {
     var realIdx = allData.indexOf(q);
     var status = statusMap[realIdx] || q.status;
     var isAnswered = status === '回答済み';
-    var safeQ = q.question.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    var draftHtml = q.draft ? (
+      '<div class="draft-box">' +
+        '<div class="draft-label">💡 AIたたき台</div>' +
+        '<div class="draft-text">' + escapeHtml(q.draft) + '</div>' +
+      '</div>'
+    ) : '';
+
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">' +
       '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + status + '</div>' +
-      '<div class="q-text">' + q.question + '</div>' +
+      '<div class="q-text">' + escapeHtml(q.question) + '</div>' +
       '<div class="q-time">' + timeAgo(q.time) + '</div>' +
+      draftHtml +
       '<div class="card-actions">' +
-      '<button class="action-btn" onclick="copyText(\'' + safeQ + '\')">コピー</button>' +
+      '<button class="action-btn" onclick="copyText(\'' + q.question.replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">質問コピー</button>' +
+      (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(\'' + q.draft.replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">たたき台コピー</button>' : '') +
       '<button class="action-btn primary" onclick="toggleStatus(' + realIdx + ')">' +
       (isAnswered ? '未回答に戻す' : '回答済みにする') +
       '</button>' +
-      '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', \'' + safeQ + '\')">削除</button>' +
+      '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + realIdx + ', \'' + q.question.replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">削除</button>' +
       '</div>' +
       '</div>';
   }).join('');
