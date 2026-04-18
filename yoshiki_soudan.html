@@ -20,7 +20,7 @@
     display: flex; align-items: center; justify-content: center;
   }
   .logo-icon svg { width: 28px; height: 28px; }
-  .logo-title { font-size: 17px; font-weight: 600; color: #3D2E1E; letter-spacing: 0.01em; }
+  .logo-title { font-size: 17px; font-weight: 600; color: #3D2E1E; }
   .logo-sub { font-size: 13px; color: #7A6A56; margin-top: 4px; }
   .card {
     background: #fff;
@@ -72,7 +72,27 @@
   }
   .q-label { font-size: 11px; color: #7A6A56; font-weight: 600; margin-bottom: 4px; }
   .q-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; }
-  .a-divider { height: 1px; background: #EDE5D8; margin: 10px 0; }
+  .show-answer-btn {
+    margin-top: 10px;
+    padding: 7px 14px;
+    background: #F5F0E8;
+    border: 1px solid #D0C4B0;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #8B6F47;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .show-answer-btn:hover { background: #EDE5D8; }
+  .answer-area {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #EDE5D8;
+    display: none;
+  }
+  .answer-area.open { display: block; }
   .a-label { font-size: 11px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
   .a-text { font-size: 14px; color: #2A4A20; line-height: 1.7; word-break: break-all; }
   .q-time { font-size: 11px; color: #B0A090; margin-top: 8px; }
@@ -152,9 +172,8 @@ function submitQuestion() {
   btn.disabled = true;
   btn.textContent = '送信中...';
 
-  var url = GAS_URL + '?question=' + encodeURIComponent(val);
   var img = new Image();
-  img.src = url;
+  img.src = GAS_URL + '?question=' + encodeURIComponent(val);
 
   setTimeout(function() {
     document.getElementById('form-view').style.display = 'none';
@@ -187,6 +206,18 @@ function escapeHtml(text) {
   return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
+function toggleAnswer(id) {
+  var area = document.getElementById('answer-area-' + id);
+  var btn = document.getElementById('answer-btn-' + id);
+  if (area.classList.contains('open')) {
+    area.classList.remove('open');
+    btn.textContent = '▼ よしきの回答を見る';
+  } else {
+    area.classList.add('open');
+    btn.textContent = '▲ 閉じる';
+  }
+}
+
 function loadQuestions() {
   fetch(GAS_URL)
     .then(function(r) { return r.json(); })
@@ -199,20 +230,22 @@ function loadQuestions() {
         list.innerHTML = '<div class="empty-msg">まだ回答済みの質問はありません</div>';
         return;
       }
-      var recent = answered.slice(-5).reverse();
-      list.innerHTML = recent.map(function(q) {
+      var recent = answered.slice(-10).reverse();
+      list.innerHTML = recent.map(function(q, i) {
         var answerHtml = '';
         if (q.answer) {
-          answerHtml = '<div class="a-divider"></div>' +
-            '<div class="a-label">よしきの回答</div>' +
-            '<div class="a-text">' + escapeHtml(q.answer) + '</div>';
+          answerHtml = '<button class="show-answer-btn" id="answer-btn-' + i + '" onclick="toggleAnswer(' + i + ')">▼ よしきの回答を見る</button>'
+            + '<div class="answer-area" id="answer-area-' + i + '">'
+            + '<div class="a-label">よしきの回答</div>'
+            + '<div class="a-text">' + escapeHtml(q.answer) + '</div>'
+            + '</div>';
         }
-        return '<div class="q-item">' +
-          '<div class="q-label">質問</div>' +
-          '<div class="q-text">' + escapeHtml(q.question) + '</div>' +
-          answerHtml +
-          '<div class="q-time">' + timeAgo(q.time) + '</div>' +
-          '</div>';
+        return '<div class="q-item">'
+          + '<div class="q-label">質問</div>'
+          + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
+          + answerHtml
+          + '<div class="q-time">' + timeAgo(q.time) + '</div>'
+          + '</div>';
       }).join('');
     })
     .catch(function() {
