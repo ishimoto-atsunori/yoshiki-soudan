@@ -110,6 +110,7 @@
   .action-btn.success { background: #3B6D11; color: #FAF7F2; border-color: #3B6D11; }
   .action-btn.draft-copy { background: #F0EBE3; color: #8B6F47; border-color: #D0C4B0; }
   .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0C4C0; }
+  .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
   .reload-btn {
     padding: 8px 16px; border-radius: 8px;
     border: 1px solid #D0C4B0; background: #fff;
@@ -200,7 +201,7 @@ function showToast(msg) {
   var t = document.getElementById('toast');
   t.textContent = msg;
   t.style.display = 'block';
-  setTimeout(function() { t.style.display = 'none'; }, 2000);
+  setTimeout(function() { t.style.display = 'none'; }, 2500);
 }
 
 function setFilter(filter, btn) {
@@ -225,38 +226,50 @@ function escapeHtml(text) {
   return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
-// ステータスをスプシに保存してから画面を更新
-function toggleStatus(row, idx) {
-  var current = allData[idx].status;
-  var newStatus = (current === '回答済み') ? '未回答' : '回答済み';
-  fetch(GAS_URL + '?action=updateStatus&row=' + row + '&status=' + encodeURIComponent(newStatus))
-    .then(function() {
-      allData[idx].status = newStatus;
-      renderCards();
-      showToast(newStatus === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
-    })
-    .catch(function() { showToast('更新に失敗しました'); });
+// POSTリクエストでGASにデータ送信
+function postToGAS(data) {
+  return fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); });
 }
 
-// 回答をスプシE列に保存して回答済みに変更
+// 回答保存（POSTで送信）
 function saveAnswer(row, idx) {
   var textarea = document.getElementById('answer-input-' + idx);
   if (!textarea) return;
   var answer = textarea.value.trim();
   if (!answer) { showToast('回答を入力してください'); return; }
 
-  fetch(GAS_URL + '?action=saveAnswer&row=' + row + '&answer=' + encodeURIComponent(answer))
+  var btn = document.getElementById('save-btn-' + idx);
+  if (btn) { btn.disabled = true; btn.textContent = '保存中...'; }
+
+  postToGAS({ action: 'saveAnswer', row: row, answer: answer })
     .then(function() {
       allData[idx].answer = answer;
-      // 回答保存と同時に回答済みにする
-      return fetch(GAS_URL + '?action=updateStatus&row=' + row + '&status=' + encodeURIComponent('回答済み'));
-    })
-    .then(function() {
       allData[idx].status = '回答済み';
       renderCards();
       showToast('回答を保存しました');
     })
-    .catch(function() { showToast('保存に失敗しました'); });
+    .catch(function() {
+      showToast('保存に失敗しました');
+      if (btn) { btn.disabled = false; btn.textContent = '回答を保存する'; }
+    });
+}
+
+// ステータス更新（POSTで送信）
+function toggleStatus(row, idx) {
+  var current = allData[idx].status;
+  var newStatus = (current === '回答済み') ? '未回答' : '回答済み';
+
+  postToGAS({ action: 'updateStatus', row: row, status: newStatus })
+    .then(function() {
+      allData[idx].status = newStatus;
+      renderCards();
+      showToast(newStatus === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
+    })
+    .catch(function() { showToast('更新に失敗しました'); });
 }
 
 function copyText(text) {
@@ -336,24 +349,21 @@ function renderCards() {
         '</div>';
     }
 
-    var qText = q.question || '';
-    var draftText = q.draft || '';
-
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">' +
       '<div class="card-top">' +
         '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>' +
-        '<div class="q-text">' + escapeHtml(qText) + '</div>' +
+        '<div class="q-text">' + escapeHtml(q.question) + '</div>' +
       '</div>' +
       '<div class="q-time">' + timeAgo(q.time) + '</div>' +
       '<div class="divider"></div>' +
       draftHtml +
       answerHtml +
       '<div class="card-actions">' +
-        '<button class="action-btn" onclick="copyText(\'' + qText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">質問コピー</button>' +
-        (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(\'' + draftText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">たたき台コピー</button>' : '') +
-        (!isAnswered ? '<button class="action-btn success" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '') +
+        '<button class="action-btn" onclick="copyText(allData[' + idx + '].question)">質問コピー</button>' +
+        (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(allData[' + idx + '].draft)">たたき台コピー</button>' : '') +
+        (!isAnswered ? '<button class="action-btn success" id="save-btn-' + idx + '" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '') +
         '<button class="action-btn primary" onclick="toggleStatus(' + q.row + ', ' + idx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>' +
-        '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', \'' + qText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">削除</button>' +
+        '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', allData[' + idx + '].question)">削除</button>' +
       '</div>' +
     '</div>';
   }).join('');
