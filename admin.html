@@ -52,21 +52,10 @@
     color: #7A6A56;
     cursor: pointer;
     font-family: inherit;
-    white-space: nowrap;
     transition: all 0.15s;
   }
-  .filter-btn.active {
-    background: #8B6F47;
-    color: #FAF7F2;
-    border-color: #8B6F47;
-  }
-  .list {
-    max-width: 860px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .filter-btn.active { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
+  .list { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
   .q-card {
     background: #fff;
     border-radius: 14px;
@@ -75,134 +64,56 @@
     border-left: 4px solid #C8B99A;
   }
   .q-card.answered { border-left-color: #A8C5A0; }
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 10px;
-  }
+  .card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
   .badge {
-    display: inline-block;
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-    white-space: nowrap;
-    flex-shrink: 0;
+    display: inline-block; font-size: 11px;
+    padding: 3px 10px; border-radius: 20px;
+    font-weight: 600; white-space: nowrap; flex-shrink: 0;
   }
   .badge.answered { background: #EAF3DE; color: #3B6D11; }
   .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
-  .q-text {
-    font-size: 15px;
-    color: #3D2E1E;
-    line-height: 1.7;
-    flex: 1;
-    word-break: break-all;
-  }
+  .q-text { font-size: 15px; color: #3D2E1E; line-height: 1.7; flex: 1; word-break: break-all; }
   .q-time { font-size: 11px; color: #B0A090; margin-bottom: 12px; }
+  .divider { height: 1px; background: #EDE5D8; margin: 10px 0; }
   .draft-box {
-    background: #F5F0E8;
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 10px;
+    background: #F5F0E8; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 10px;
     border-left: 3px solid #C8B99A;
   }
-  .draft-label {
-    font-size: 10px;
-    color: #8B6F47;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .draft-text {
-    font-size: 13px;
-    color: #5A4A3A;
-    line-height: 1.7;
-    word-break: break-all;
-  }
+  .draft-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 6px; }
+  .draft-text { font-size: 13px; color: #5A4A3A; line-height: 1.7; word-break: break-all; }
   .answer-box {
-    background: #EAF3DE;
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 10px;
+    background: #EAF3DE; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 10px;
     border-left: 3px solid #A8C5A0;
   }
-  .answer-label {
-    font-size: 10px;
-    color: #3B6D11;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .answer-text {
-    font-size: 13px;
-    color: #2A4A20;
-    line-height: 1.7;
-    word-break: break-all;
-  }
+  .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 6px; }
+  .answer-text { font-size: 13px; color: #2A4A20; line-height: 1.7; word-break: break-all; }
   .answer-input-area { margin-bottom: 10px; }
-  .answer-input-label {
-    font-size: 11px;
-    color: #7A6A56;
-    margin-bottom: 6px;
-  }
+  .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 6px; font-weight: 600; }
   textarea.answer-input {
-    width: 100%;
-    min-height: 80px;
-    border: 1px solid #D0C4B0;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 13px;
-    font-family: inherit;
-    color: #3D2E1E;
-    background: #FAF7F2;
-    resize: none;
-    line-height: 1.6;
-    outline: none;
+    width: 100%; min-height: 80px;
+    border: 1px solid #D0C4B0; border-radius: 8px;
+    padding: 10px; font-size: 13px;
+    font-family: inherit; color: #3D2E1E;
+    background: #FAF7F2; resize: none; line-height: 1.6; outline: none;
   }
   textarea.answer-input:focus { border-color: #A89070; }
   .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
   .action-btn {
-    padding: 9px 14px;
-    border-radius: 8px;
-    border: 1px solid #D0C4B0;
-    background: #FAF7F2;
-    font-size: 12px;
-    color: #7A6A56;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
+    padding: 9px 14px; border-radius: 8px;
+    border: 1px solid #D0C4B0; background: #FAF7F2;
+    font-size: 12px; color: #7A6A56;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
   }
-  .action-btn:active { opacity: 0.7; }
-  .action-btn.primary {
-    background: #8B6F47;
-    color: #FAF7F2;
-    border-color: #8B6F47;
-  }
-  .action-btn.success {
-    background: #3B6D11;
-    color: #FAF7F2;
-    border-color: #3B6D11;
-  }
-  .action-btn.draft-copy {
-    background: #F0EBE3;
-    color: #8B6F47;
-    border-color: #D0C4B0;
-  }
-  .action-btn.danger {
-    background: #fff;
-    color: #C0392B;
-    border-color: #E0C4C0;
-  }
+  .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
+  .action-btn.success { background: #3B6D11; color: #FAF7F2; border-color: #3B6D11; }
+  .action-btn.draft-copy { background: #F0EBE3; color: #8B6F47; border-color: #D0C4B0; }
+  .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0C4C0; }
   .reload-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid #D0C4B0;
-    background: #fff;
-    font-size: 13px;
-    color: #7A6A56;
-    cursor: pointer;
-    font-family: inherit;
+    padding: 8px 16px; border-radius: 8px;
+    border: 1px solid #D0C4B0; background: #fff;
+    font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit;
   }
   .empty { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; }
   .loading { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; }
@@ -210,37 +121,24 @@
     position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
     background: #3D2E1E; color: #FAF7F2;
     padding: 10px 20px; border-radius: 20px;
-    font-size: 13px; display: none;
-    z-index: 100;
-    white-space: nowrap;
+    font-size: 13px; display: none; z-index: 100; white-space: nowrap;
   }
   .confirm-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.4);
-    display: none; align-items: center; justify-content: center;
-    z-index: 200;
+    display: none; align-items: center; justify-content: center; z-index: 200;
   }
   .confirm-overlay.show { display: flex; }
   .confirm-box {
-    background: #fff;
-    border-radius: 16px;
-    padding: 1.5rem;
-    max-width: 320px;
-    width: 90%;
-    text-align: center;
+    background: #fff; border-radius: 16px; padding: 1.5rem;
+    max-width: 320px; width: 90%; text-align: center;
   }
   .confirm-title { font-size: 16px; font-weight: 600; color: #3D2E1E; margin-bottom: 8px; }
   .confirm-sub { font-size: 13px; color: #7A6A56; margin-bottom: 1.5rem; line-height: 1.6; }
   .confirm-actions { display: flex; gap: 8px; }
-  .confirm-btn {
-    flex: 1; padding: 12px;
-    border-radius: 8px; border: none;
-    font-size: 14px; font-family: inherit;
-    cursor: pointer; font-weight: 600;
-  }
+  .confirm-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; font-size: 14px; font-family: inherit; cursor: pointer; font-weight: 600; }
   .confirm-btn.cancel { background: #F5F0E8; color: #7A6A56; }
   .confirm-btn.delete { background: #C0392B; color: #fff; }
-  .divider { height: 1px; background: #EDE5D8; margin: 10px 0; }
 </style>
 </head>
 <body>
@@ -295,7 +193,6 @@
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwfEQz_rwzxYGu85xuTTecPYvwb76Je3Hg1RkUrGbejH7JPNxZfqQ1tO2n4Hctp7BDMEg/exec';
 var allData = [];
 var currentFilter = 'all';
-var statusMap = {};
 var pendingDeleteRow = null;
 var pendingDeleteIdx = null;
 
@@ -324,13 +221,24 @@ function timeAgo(dateStr) {
   return Math.floor(diff / 86400) + '日前';
 }
 
-function toggleStatus(idx) {
-  var current = statusMap[idx] || allData[idx].status;
-  statusMap[idx] = (current === '回答済み') ? '未回答' : '回答済み';
-  renderCards();
-  showToast(statusMap[idx] === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
+function escapeHtml(text) {
+  return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
+// ステータスをスプシに保存してから画面を更新
+function toggleStatus(row, idx) {
+  var current = allData[idx].status;
+  var newStatus = (current === '回答済み') ? '未回答' : '回答済み';
+  fetch(GAS_URL + '?action=updateStatus&row=' + row + '&status=' + encodeURIComponent(newStatus))
+    .then(function() {
+      allData[idx].status = newStatus;
+      renderCards();
+      showToast(newStatus === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
+    })
+    .catch(function() { showToast('更新に失敗しました'); });
+}
+
+// 回答をスプシE列に保存して回答済みに変更
 function saveAnswer(row, idx) {
   var textarea = document.getElementById('answer-input-' + idx);
   if (!textarea) return;
@@ -340,7 +248,11 @@ function saveAnswer(row, idx) {
   fetch(GAS_URL + '?action=saveAnswer&row=' + row + '&answer=' + encodeURIComponent(answer))
     .then(function() {
       allData[idx].answer = answer;
-      statusMap[idx] = '回答済み';
+      // 回答保存と同時に回答済みにする
+      return fetch(GAS_URL + '?action=updateStatus&row=' + row + '&status=' + encodeURIComponent('回答済み'));
+    })
+    .then(function() {
+      allData[idx].status = '回答済み';
       renderCards();
       showToast('回答を保存しました');
     })
@@ -382,40 +294,24 @@ function executeDelete() {
   fetch(GAS_URL + '?action=delete&row=' + row)
     .then(function() {
       allData.splice(idx, 1);
-      var newStatusMap = {};
-      Object.keys(statusMap).forEach(function(k) {
-        var ki = parseInt(k);
-        if (ki < idx) newStatusMap[ki] = statusMap[k];
-        else if (ki > idx) newStatusMap[ki - 1] = statusMap[k];
-      });
-      statusMap = newStatusMap;
       renderCards();
       showToast('削除しました');
     })
     .catch(function() { showToast('削除に失敗しました'); });
 }
 
-function escapeHtml(text) {
-  return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
-}
-
 function renderCards() {
   var list = document.getElementById('q-list');
-  var filtered = allData.filter(function(q, i) {
-    var status = statusMap[i] || q.status;
-    if (currentFilter === 'unanswered') return status !== '回答済み';
-    if (currentFilter === 'answered') return status === '回答済み';
+  var filtered = allData.filter(function(q) {
+    if (currentFilter === 'unanswered') return q.status !== '回答済み';
+    if (currentFilter === 'answered') return q.status === '回答済み';
     return true;
   });
 
-  var unanswered = allData.filter(function(q, i) {
-    return (statusMap[i] || q.status) !== '回答済み';
-  }).length;
-  var answered = allData.length - unanswered;
-
+  var unanswered = allData.filter(function(q) { return q.status !== '回答済み'; }).length;
   document.getElementById('total-count').textContent = allData.length;
   document.getElementById('unanswered-count').textContent = unanswered;
-  document.getElementById('answered-count').textContent = answered;
+  document.getElementById('answered-count').textContent = allData.length - unanswered;
 
   if (filtered.length === 0) {
     list.innerHTML = '<div class="empty">該当する質問はありません</div>';
@@ -423,50 +319,43 @@ function renderCards() {
   }
 
   list.innerHTML = filtered.map(function(q) {
-    var realIdx = allData.indexOf(q);
-    var status = statusMap[realIdx] || q.status;
-    var isAnswered = status === '回答済み';
-    var answer = q.answer || '';
+    var idx = allData.indexOf(q);
+    var isAnswered = q.status === '回答済み';
 
     var draftHtml = q.draft ? (
-      '<div class="draft-box">' +
-        '<div class="draft-label">💡 AIたたき台</div>' +
-        '<div class="draft-text">' + escapeHtml(q.draft) + '</div>' +
-      '</div>'
+      '<div class="draft-box"><div class="draft-label">💡 AIたたき台</div><div class="draft-text">' + escapeHtml(q.draft) + '</div></div>'
     ) : '';
 
     var answerHtml = '';
-    if (isAnswered && answer) {
-      answerHtml = '<div class="answer-box">' +
-        '<div class="answer-label">✅ よしきの回答</div>' +
-        '<div class="answer-text">' + escapeHtml(answer) + '</div>' +
-        '</div>';
+    if (isAnswered && q.answer) {
+      answerHtml = '<div class="answer-box"><div class="answer-label">✅ よしきの回答</div><div class="answer-text">' + escapeHtml(q.answer) + '</div></div>';
     } else if (!isAnswered) {
       answerHtml = '<div class="answer-input-area">' +
-        '<div class="answer-input-label">回答を入力（保存するとスプシに記録されます）</div>' +
-        '<textarea class="answer-input" id="answer-input-' + realIdx + '" placeholder="回答を入力してください...">' + escapeHtml(answer) + '</textarea>' +
+        '<div class="answer-input-label">最終回答を入力（オプチャ投稿と同じ内容をコピペ）</div>' +
+        '<textarea class="answer-input" id="answer-input-' + idx + '" placeholder="よしきさんが実際に投稿した回答をここに貼り付けてください...">' + (q.answer || '') + '</textarea>' +
         '</div>';
     }
 
-    var actionsHtml = '<div class="card-actions">' +
-      '<button class="action-btn" onclick="copyText(\'' + (q.question || '').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">質問コピー</button>' +
-      (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(\'' + (q.draft || '').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">たたき台コピー</button>' : '') +
-      (!isAnswered ? '<button class="action-btn success" onclick="saveAnswer(' + q.row + ', ' + realIdx + ')">回答を保存</button>' : '') +
-      '<button class="action-btn primary" onclick="toggleStatus(' + realIdx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>' +
-      '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + realIdx + ', \'' + (q.question || '').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">削除</button>' +
-      '</div>';
+    var qText = q.question || '';
+    var draftText = q.draft || '';
 
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">' +
       '<div class="card-top">' +
-        '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + status + '</div>' +
-        '<div class="q-text">' + escapeHtml(q.question) + '</div>' +
+        '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>' +
+        '<div class="q-text">' + escapeHtml(qText) + '</div>' +
       '</div>' +
       '<div class="q-time">' + timeAgo(q.time) + '</div>' +
       '<div class="divider"></div>' +
       draftHtml +
       answerHtml +
-      actionsHtml +
-      '</div>';
+      '<div class="card-actions">' +
+        '<button class="action-btn" onclick="copyText(\'' + qText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">質問コピー</button>' +
+        (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(\'' + draftText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">たたき台コピー</button>' : '') +
+        (!isAnswered ? '<button class="action-btn success" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '') +
+        '<button class="action-btn primary" onclick="toggleStatus(' + q.row + ', ' + idx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>' +
+        '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', \'' + qText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ') + '\')">削除</button>' +
+      '</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -476,7 +365,6 @@ function loadQuestions() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       allData = data || [];
-      statusMap = {};
       renderCards();
     })
     .catch(function() {

@@ -54,31 +54,35 @@
     font-size: 15px; font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.15s;
     margin-top: 0.5rem;
   }
   .submit-btn:hover { background: #7A6040; }
-  .submit-btn:active { transform: scale(0.98); }
-  .submit-btn:disabled { background: #D0C4B0; cursor: not-allowed; color: #FAF7F2; }
+  .submit-btn:disabled { background: #D0C4B0; cursor: not-allowed; }
   .recent-section { margin-top: 1.5rem; }
   .section-title { font-size: 13px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
   .section-sub { font-size: 11px; color: #B0A090; margin-bottom: 10px; }
   .q-item {
     background: #fff;
-    border-radius: 10px; padding: 12px 14px;
-    margin-bottom: 8px;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid #E0D5C5;
     border-left: 3px solid #A8C5A0;
   }
-  .q-text { font-size: 14px; color: #3D2E1E; line-height: 1.6; }
-  .q-time { font-size: 11px; color: #B0A090; margin-top: 4px; }
-  .empty-msg { font-size: 13px; color: #B0A090; text-align: center; padding: 1rem 0; }
+  .q-label { font-size: 11px; color: #7A6A56; font-weight: 600; margin-bottom: 4px; }
+  .q-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; }
+  .a-divider { height: 1px; background: #EDE5D8; margin: 10px 0; }
+  .a-label { font-size: 11px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
+  .a-text { font-size: 14px; color: #2A4A20; line-height: 1.7; word-break: break-all; }
+  .q-time { font-size: 11px; color: #B0A090; margin-top: 8px; }
+  .empty-msg { font-size: 13px; color: #B0A090; text-align: center; padding: 1.5rem 0; }
   .success-state { text-align: center; padding: 2rem 1rem; }
   .success-icon {
     width: 56px; height: 56px; margin: 0 auto 16px;
     background: #E8DFD0; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
   }
-  .success-icon svg { width: 28px; height: 28px; }
   .success-title { font-size: 17px; font-weight: 600; color: #3D2E1E; margin-bottom: 8px; }
   .success-sub { font-size: 14px; color: #7A6A56; line-height: 1.6; }
   .back-btn {
@@ -179,6 +183,10 @@ function timeAgo(dateStr) {
   return Math.floor(diff / 86400) + '日前';
 }
 
+function escapeHtml(text) {
+  return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+}
+
 function loadQuestions() {
   fetch(GAS_URL)
     .then(function(r) { return r.json(); })
@@ -193,7 +201,18 @@ function loadQuestions() {
       }
       var recent = answered.slice(-5).reverse();
       list.innerHTML = recent.map(function(q) {
-        return '<div class="q-item"><div class="q-text">' + q.question + '</div><div class="q-time">' + timeAgo(q.time) + '</div></div>';
+        var answerHtml = '';
+        if (q.answer) {
+          answerHtml = '<div class="a-divider"></div>' +
+            '<div class="a-label">よしきの回答</div>' +
+            '<div class="a-text">' + escapeHtml(q.answer) + '</div>';
+        }
+        return '<div class="q-item">' +
+          '<div class="q-label">質問</div>' +
+          '<div class="q-text">' + escapeHtml(q.question) + '</div>' +
+          answerHtml +
+          '<div class="q-time">' + timeAgo(q.time) + '</div>' +
+          '</div>';
       }).join('');
     })
     .catch(function() {
