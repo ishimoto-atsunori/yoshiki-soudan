@@ -6,134 +6,51 @@
 <title>管理画面｜よしきの相談室</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif;
-    background: #F5F0E8;
-    min-height: 100vh;
-    padding: 1.25rem 1rem;
-  }
-  .header {
-    max-width: 860px;
-    margin: 0 auto 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  body { font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif; background: #F5F0E8; min-height: 100vh; padding: 1.25rem 1rem; }
+  .header { max-width: 860px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: space-between; }
   .header-title { font-size: 16px; font-weight: 600; color: #3D2E1E; }
   .header-sub { font-size: 12px; color: #7A6A56; margin-top: 2px; }
-  .stats {
-    max-width: 860px;
-    margin: 0 auto 1.25rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  .stat-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 0.875rem 0.5rem;
-    text-align: center;
-    border: 1px solid #E0D5C5;
-  }
+  .stats { max-width: 860px; margin: 0 auto 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat-card { background: #fff; border-radius: 12px; padding: 0.875rem 0.5rem; text-align: center; border: 1px solid #E0D5C5; }
   .stat-num { font-size: 26px; font-weight: 600; color: #3D2E1E; }
   .stat-label { font-size: 11px; color: #7A6A56; margin-top: 3px; }
-  .filters {
-    max-width: 860px;
-    margin: 0 auto 1rem;
-    display: flex;
-    gap: 8px;
-  }
-  .filter-btn {
-    padding: 7px 16px;
-    border-radius: 20px;
-    border: 1px solid #D0C4B0;
-    background: #fff;
-    font-size: 13px;
-    color: #7A6A56;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-  }
+  .filters { max-width: 860px; margin: 0 auto 1rem; display: flex; gap: 8px; }
+  .filter-btn { padding: 7px 16px; border-radius: 20px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .filter-btn.active { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
   .list { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
-  .q-card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 1.25rem;
-    border: 1px solid #E0D5C5;
-    border-left: 4px solid #C8B99A;
-  }
+  .q-card { background: #fff; border-radius: 14px; padding: 1.25rem; border: 1px solid #E0D5C5; border-left: 4px solid #C8B99A; }
   .q-card.answered { border-left-color: #A8C5A0; }
   .card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
-  .badge {
-    display: inline-block; font-size: 11px;
-    padding: 3px 10px; border-radius: 20px;
-    font-weight: 600; white-space: nowrap; flex-shrink: 0;
-  }
+  .badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
   .badge.answered { background: #EAF3DE; color: #3B6D11; }
   .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
   .q-text { font-size: 15px; color: #3D2E1E; line-height: 1.7; flex: 1; word-break: break-all; }
   .q-time { font-size: 11px; color: #B0A090; margin-bottom: 12px; }
   .divider { height: 1px; background: #EDE5D8; margin: 10px 0; }
-  .draft-box {
-    background: #F5F0E8; border-radius: 8px;
-    padding: 10px 12px; margin-bottom: 10px;
-    border-left: 3px solid #C8B99A;
-  }
+  .draft-box { background: #F5F0E8; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border-left: 3px solid #C8B99A; }
   .draft-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 6px; }
   .draft-text { font-size: 13px; color: #5A4A3A; line-height: 1.7; word-break: break-all; }
-  .answer-box {
-    background: #EAF3DE; border-radius: 8px;
-    padding: 10px 12px; margin-bottom: 10px;
-    border-left: 3px solid #A8C5A0;
-  }
+  .answer-box { background: #EAF3DE; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border-left: 3px solid #A8C5A0; }
   .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 6px; }
   .answer-text { font-size: 13px; color: #2A4A20; line-height: 1.7; word-break: break-all; }
   .answer-input-area { margin-bottom: 10px; }
   .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 6px; font-weight: 600; }
-  textarea.answer-input {
-    width: 100%; min-height: 80px;
-    border: 1px solid #D0C4B0; border-radius: 8px;
-    padding: 10px; font-size: 13px;
-    font-family: inherit; color: #3D2E1E;
-    background: #FAF7F2; resize: none; line-height: 1.6; outline: none;
-  }
+  textarea.answer-input { width: 100%; min-height: 80px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 10px; font-size: 13px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
   textarea.answer-input:focus { border-color: #A89070; }
   .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-  .action-btn {
-    padding: 9px 14px; border-radius: 8px;
-    border: 1px solid #D0C4B0; background: #FAF7F2;
-    font-size: 12px; color: #7A6A56;
-    cursor: pointer; font-family: inherit; transition: all 0.15s;
-  }
+  .action-btn { padding: 9px 14px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 12px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
   .action-btn.success { background: #3B6D11; color: #FAF7F2; border-color: #3B6D11; }
   .action-btn.draft-copy { background: #F0EBE3; color: #8B6F47; border-color: #D0C4B0; }
   .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0C4C0; }
-  .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .reload-btn {
-    padding: 8px 16px; border-radius: 8px;
-    border: 1px solid #D0C4B0; background: #fff;
-    font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit;
-  }
+  .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .reload-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; }
   .empty { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; }
   .loading { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; }
-  .toast {
-    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    background: #3D2E1E; color: #FAF7F2;
-    padding: 10px 20px; border-radius: 20px;
-    font-size: 13px; display: none; z-index: 100; white-space: nowrap;
-  }
-  .confirm-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4);
-    display: none; align-items: center; justify-content: center; z-index: 200;
-  }
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #3D2E1E; color: #FAF7F2; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 100; white-space: nowrap; }
+  .confirm-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 200; }
   .confirm-overlay.show { display: flex; }
-  .confirm-box {
-    background: #fff; border-radius: 16px; padding: 1.5rem;
-    max-width: 320px; width: 90%; text-align: center;
-  }
+  .confirm-box { background: #fff; border-radius: 16px; padding: 1.5rem; max-width: 320px; width: 90%; text-align: center; }
   .confirm-title { font-size: 16px; font-weight: 600; color: #3D2E1E; margin-bottom: 8px; }
   .confirm-sub { font-size: 13px; color: #7A6A56; margin-bottom: 1.5rem; line-height: 1.6; }
   .confirm-actions { display: flex; gap: 8px; }
@@ -153,18 +70,9 @@
 </div>
 
 <div class="stats">
-  <div class="stat-card">
-    <div class="stat-num" id="total-count">-</div>
-    <div class="stat-label">合計</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num" id="unanswered-count" style="color:#8B5E00;">-</div>
-    <div class="stat-label">未回答</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num" id="answered-count" style="color:#3B6D11;">-</div>
-    <div class="stat-label">回答済み</div>
-  </div>
+  <div class="stat-card"><div class="stat-num" id="total-count">-</div><div class="stat-label">合計</div></div>
+  <div class="stat-card"><div class="stat-num" id="unanswered-count" style="color:#8B5E00;">-</div><div class="stat-label">未回答</div></div>
+  <div class="stat-card"><div class="stat-num" id="answered-count" style="color:#3B6D11;">-</div><div class="stat-label">回答済み</div></div>
 </div>
 
 <div class="filters">
@@ -173,10 +81,7 @@
   <button class="filter-btn" onclick="setFilter('answered', this)">回答済み</button>
 </div>
 
-<div class="list" id="q-list">
-  <div class="loading">読み込み中...</div>
-</div>
-
+<div class="list" id="q-list"><div class="loading">読み込み中...</div></div>
 <div class="toast" id="toast"></div>
 
 <div class="confirm-overlay" id="confirm-overlay">
@@ -226,16 +131,15 @@ function escapeHtml(text) {
   return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
-// POSTリクエストでGASにデータ送信
-function postToGAS(data) {
-  return fetch(GAS_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(function(r) { return r.json(); });
+// imgタグ経由でGASにGETリクエストを送信（CORSリダイレクト問題を回避）
+function gasRequest(params, callback) {
+  var url = GAS_URL + '?' + params;
+  var img = new Image();
+  img.onload = function() { if (callback) callback(); };
+  img.onerror = function() { if (callback) callback(); }; // GASはJSONを返すのでonerrorになるが処理は実行される
+  img.src = url;
 }
 
-// 回答保存（POSTで送信）
 function saveAnswer(row, idx) {
   var textarea = document.getElementById('answer-input-' + idx);
   if (!textarea) return;
@@ -245,31 +149,23 @@ function saveAnswer(row, idx) {
   var btn = document.getElementById('save-btn-' + idx);
   if (btn) { btn.disabled = true; btn.textContent = '保存中...'; }
 
-  postToGAS({ action: 'saveAnswer', row: row, answer: answer })
-    .then(function() {
-      allData[idx].answer = answer;
-      allData[idx].status = '回答済み';
-      renderCards();
-      showToast('回答を保存しました');
-    })
-    .catch(function() {
-      showToast('保存に失敗しました');
-      if (btn) { btn.disabled = false; btn.textContent = '回答を保存する'; }
-    });
+  // saveAnswerでE列保存＋C列を回答済みに同時更新
+  gasRequest('action=saveAnswer&row=' + row + '&answer=' + encodeURIComponent(answer), function() {
+    allData[idx].answer = answer;
+    allData[idx].status = '回答済み';
+    renderCards();
+    showToast('回答を保存しました');
+  });
 }
 
-// ステータス更新（POSTで送信）
 function toggleStatus(row, idx) {
   var current = allData[idx].status;
   var newStatus = (current === '回答済み') ? '未回答' : '回答済み';
-
-  postToGAS({ action: 'updateStatus', row: row, status: newStatus })
-    .then(function() {
-      allData[idx].status = newStatus;
-      renderCards();
-      showToast(newStatus === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
-    })
-    .catch(function() { showToast('更新に失敗しました'); });
+  gasRequest('action=updateStatus&row=' + row + '&status=' + encodeURIComponent(newStatus), function() {
+    allData[idx].status = newStatus;
+    renderCards();
+    showToast(newStatus === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
+  });
 }
 
 function copyText(text) {
@@ -304,13 +200,11 @@ function executeDelete() {
   var row = pendingDeleteRow;
   var idx = pendingDeleteIdx;
   closeConfirm();
-  fetch(GAS_URL + '?action=delete&row=' + row)
-    .then(function() {
-      allData.splice(idx, 1);
-      renderCards();
-      showToast('削除しました');
-    })
-    .catch(function() { showToast('削除に失敗しました'); });
+  gasRequest('action=delete&row=' + row, function() {
+    allData.splice(idx, 1);
+    renderCards();
+    showToast('削除しました');
+  });
 }
 
 function renderCards() {
@@ -335,37 +229,37 @@ function renderCards() {
     var idx = allData.indexOf(q);
     var isAnswered = q.status === '回答済み';
 
-    var draftHtml = q.draft ? (
-      '<div class="draft-box"><div class="draft-label">💡 AIたたき台</div><div class="draft-text">' + escapeHtml(q.draft) + '</div></div>'
-    ) : '';
+    var draftHtml = q.draft
+      ? '<div class="draft-box"><div class="draft-label">💡 AIたたき台</div><div class="draft-text">' + escapeHtml(q.draft) + '</div></div>'
+      : '';
 
     var answerHtml = '';
     if (isAnswered && q.answer) {
       answerHtml = '<div class="answer-box"><div class="answer-label">✅ よしきの回答</div><div class="answer-text">' + escapeHtml(q.answer) + '</div></div>';
     } else if (!isAnswered) {
-      answerHtml = '<div class="answer-input-area">' +
-        '<div class="answer-input-label">最終回答を入力（オプチャ投稿と同じ内容をコピペ）</div>' +
-        '<textarea class="answer-input" id="answer-input-' + idx + '" placeholder="よしきさんが実際に投稿した回答をここに貼り付けてください...">' + (q.answer || '') + '</textarea>' +
-        '</div>';
+      answerHtml = '<div class="answer-input-area">'
+        + '<div class="answer-input-label">最終回答を入力（オプチャ投稿と同じ内容をコピペ）</div>'
+        + '<textarea class="answer-input" id="answer-input-' + idx + '" placeholder="よしきさんが実際に投稿した回答をここに貼り付けてください...">' + (q.answer || '') + '</textarea>'
+        + '</div>';
     }
 
-    return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">' +
-      '<div class="card-top">' +
-        '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>' +
-        '<div class="q-text">' + escapeHtml(q.question) + '</div>' +
-      '</div>' +
-      '<div class="q-time">' + timeAgo(q.time) + '</div>' +
-      '<div class="divider"></div>' +
-      draftHtml +
-      answerHtml +
-      '<div class="card-actions">' +
-        '<button class="action-btn" onclick="copyText(allData[' + idx + '].question)">質問コピー</button>' +
-        (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(allData[' + idx + '].draft)">たたき台コピー</button>' : '') +
-        (!isAnswered ? '<button class="action-btn success" id="save-btn-' + idx + '" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '') +
-        '<button class="action-btn primary" onclick="toggleStatus(' + q.row + ', ' + idx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>' +
-        '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', allData[' + idx + '].question)">削除</button>' +
-      '</div>' +
-    '</div>';
+    return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">'
+      + '<div class="card-top">'
+        + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>'
+        + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
+      + '</div>'
+      + '<div class="q-time">' + timeAgo(q.time) + '</div>'
+      + '<div class="divider"></div>'
+      + draftHtml
+      + answerHtml
+      + '<div class="card-actions">'
+        + '<button class="action-btn" onclick="copyText(allData[' + idx + '].question)">質問コピー</button>'
+        + (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(allData[' + idx + '].draft)">たたき台コピー</button>' : '')
+        + (!isAnswered ? '<button class="action-btn success" id="save-btn-' + idx + '" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '')
+        + '<button class="action-btn primary" onclick="toggleStatus(' + q.row + ', ' + idx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>'
+        + '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', allData[' + idx + '].question)">削除</button>'
+      + '</div>'
+    + '</div>';
   }).join('');
 }
 
