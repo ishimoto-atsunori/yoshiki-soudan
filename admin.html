@@ -7,46 +7,50 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif; background: #F5F0E8; min-height: 100vh; padding: 1.25rem 1rem; }
-  .header { max-width: 860px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+  .header { max-width: 900px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: space-between; }
   .header-title { font-size: 16px; font-weight: 600; color: #3D2E1E; }
   .header-sub { font-size: 12px; color: #7A6A56; margin-top: 2px; }
-  .stats { max-width: 860px; margin: 0 auto 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stats { max-width: 900px; margin: 0 auto 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat-card { background: #fff; border-radius: 12px; padding: 0.875rem 0.5rem; text-align: center; border: 1px solid #E0D5C5; }
   .stat-num { font-size: 26px; font-weight: 600; color: #3D2E1E; }
   .stat-label { font-size: 11px; color: #7A6A56; margin-top: 3px; }
-  .filters { max-width: 860px; margin: 0 auto 1rem; display: flex; gap: 8px; }
+  .filters { max-width: 900px; margin: 0 auto 1rem; display: flex; gap: 8px; }
   .filter-btn { padding: 7px 16px; border-radius: 20px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .filter-btn.active { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
-  .list { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
-  .q-card { background: #fff; border-radius: 14px; padding: 1.25rem; border: 1px solid #E0D5C5; border-left: 4px solid #C8B99A; }
+
+  /* グリッド：スマホ1列、タブレット2列、PC3列 */
+  .grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 860px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .q-card { background: #fff; border-radius: 14px; padding: 1rem; border: 1px solid #E0D5C5; border-left: 4px solid #C8B99A; display: flex; flex-direction: column; }
   .q-card.answered { border-left-color: #A8C5A0; }
-  .card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
-  .badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+  .badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; margin-bottom: 8px; }
   .badge.answered { background: #EAF3DE; color: #3B6D11; }
   .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
-  .q-text { font-size: 15px; color: #3D2E1E; line-height: 1.7; flex: 1; word-break: break-all; }
-  .q-time { font-size: 11px; color: #B0A090; margin-bottom: 12px; }
-  .divider { height: 1px; background: #EDE5D8; margin: 10px 0; }
-  .draft-box { background: #F5F0E8; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border-left: 3px solid #C8B99A; }
-  .draft-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 6px; }
-  .draft-text { font-size: 13px; color: #5A4A3A; line-height: 1.7; word-break: break-all; }
-  .answer-box { background: #EAF3DE; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border-left: 3px solid #A8C5A0; }
-  .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 6px; }
-  .answer-text { font-size: 13px; color: #2A4A20; line-height: 1.7; word-break: break-all; }
-  .answer-input-area { margin-bottom: 10px; }
-  .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 6px; font-weight: 600; }
-  textarea.answer-input { width: 100%; min-height: 80px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 10px; font-size: 13px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
+  .q-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; margin-bottom: 6px; flex: 1; }
+  .q-time { font-size: 11px; color: #B0A090; margin-bottom: 10px; }
+  .divider { height: 1px; background: #EDE5D8; margin: 8px 0; }
+  .draft-box { background: #F5F0E8; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #C8B99A; }
+  .draft-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 4px; }
+  .draft-text { font-size: 12px; color: #5A4A3A; line-height: 1.6; word-break: break-all; }
+  .answer-box { background: #EAF3DE; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #A8C5A0; }
+  .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
+  .answer-text { font-size: 12px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
+  .answer-input-area { margin-bottom: 8px; }
+  .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
+  textarea.answer-input { width: 100%; min-height: 70px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 8px; font-size: 12px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
   textarea.answer-input:focus { border-color: #A89070; }
-  .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-  .action-btn { padding: 9px 14px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 12px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .card-actions { display: flex; gap: 5px; flex-wrap: wrap; margin-top: auto; }
+  .action-btn { padding: 8px 10px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 11px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
   .action-btn.success { background: #3B6D11; color: #FAF7F2; border-color: #3B6D11; }
   .action-btn.draft-copy { background: #F0EBE3; color: #8B6F47; border-color: #D0C4B0; }
   .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0C4C0; }
   .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .reload-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; }
-  .empty { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; }
-  .loading { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; }
+  .empty { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; grid-column: 1/-1; }
+  .loading { text-align: center; padding: 3rem 1rem; color: #B0A090; font-size: 14px; grid-column: 1/-1; }
   .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #3D2E1E; color: #FAF7F2; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 100; white-space: nowrap; }
   .confirm-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 200; }
   .confirm-overlay.show { display: flex; }
@@ -81,7 +85,7 @@
   <button class="filter-btn" onclick="setFilter('answered', this)">回答済み</button>
 </div>
 
-<div class="list" id="q-list"><div class="loading">読み込み中...</div></div>
+<div class="grid" id="q-grid"><div class="loading">読み込み中...</div></div>
 <div class="toast" id="toast"></div>
 
 <div class="confirm-overlay" id="confirm-overlay">
@@ -131,12 +135,11 @@ function escapeHtml(text) {
   return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
 }
 
-// imgタグ経由でGASにGETリクエストを送信（CORSリダイレクト問題を回避）
 function gasRequest(params, callback) {
   var url = GAS_URL + '?' + params;
   var img = new Image();
   img.onload = function() { if (callback) callback(); };
-  img.onerror = function() { if (callback) callback(); }; // GASはJSONを返すのでonerrorになるが処理は実行される
+  img.onerror = function() { if (callback) callback(); };
   img.src = url;
 }
 
@@ -145,11 +148,8 @@ function saveAnswer(row, idx) {
   if (!textarea) return;
   var answer = textarea.value.trim();
   if (!answer) { showToast('回答を入力してください'); return; }
-
   var btn = document.getElementById('save-btn-' + idx);
   if (btn) { btn.disabled = true; btn.textContent = '保存中...'; }
-
-  // saveAnswerでE列保存＋C列を回答済みに同時更新
   gasRequest('action=saveAnswer&row=' + row + '&answer=' + encodeURIComponent(answer), function() {
     allData[idx].answer = answer;
     allData[idx].status = '回答済み';
@@ -208,7 +208,7 @@ function executeDelete() {
 }
 
 function renderCards() {
-  var list = document.getElementById('q-list');
+  var grid = document.getElementById('q-grid');
   var filtered = allData.filter(function(q) {
     if (currentFilter === 'unanswered') return q.status !== '回答済み';
     if (currentFilter === 'answered') return q.status === '回答済み';
@@ -221,11 +221,11 @@ function renderCards() {
   document.getElementById('answered-count').textContent = allData.length - unanswered;
 
   if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty">該当する質問はありません</div>';
+    grid.innerHTML = '<div class="empty">該当する質問はありません</div>';
     return;
   }
 
-  list.innerHTML = filtered.map(function(q) {
+  grid.innerHTML = filtered.map(function(q) {
     var idx = allData.indexOf(q);
     var isAnswered = q.status === '回答済み';
 
@@ -244,10 +244,8 @@ function renderCards() {
     }
 
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">'
-      + '<div class="card-top">'
-        + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>'
-        + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
-      + '</div>'
+      + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>'
+      + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
       + '<div class="q-time">' + timeAgo(q.time) + '</div>'
       + '<div class="divider"></div>'
       + draftHtml
@@ -264,7 +262,7 @@ function renderCards() {
 }
 
 function loadQuestions() {
-  document.getElementById('q-list').innerHTML = '<div class="loading">読み込み中...</div>';
+  document.getElementById('q-grid').innerHTML = '<div class="loading">読み込み中...</div>';
   fetch(GAS_URL)
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -272,7 +270,7 @@ function loadQuestions() {
       renderCards();
     })
     .catch(function() {
-      document.getElementById('q-list').innerHTML = '<div class="empty">読み込みに失敗しました。更新ボタンを押してください。</div>';
+      document.getElementById('q-grid').innerHTML = '<div class="empty">読み込みに失敗しました。更新ボタンを押してください。</div>';
     });
 }
 
