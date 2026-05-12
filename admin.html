@@ -39,7 +39,7 @@
   .answer-text { font-size: 12px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
   .answer-input-area { margin-bottom: 8px; }
   .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
-  textarea.answer-input { width: 100%; min-height: 70px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 8px; font-size: 12px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
+  textarea.answer-input { width: 100%; min-height: 360px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 8px; font-size: 12px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
   textarea.answer-input:focus { border-color: #A89070; }
   .card-actions { display: flex; gap: 5px; flex-wrap: wrap; margin-top: auto; }
   .action-btn { padding: 8px 10px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 11px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
@@ -79,10 +79,14 @@
   <div class="stat-card"><div class="stat-num" id="answered-count" style="color:#3B6D11;">-</div><div class="stat-label">回答済み</div></div>
 </div>
 
-<div class="filters">
+<div class="filters" style="flex-wrap:wrap;gap:8px;">
   <button class="filter-btn active" onclick="setFilter('all', this)">すべて</button>
   <button class="filter-btn" onclick="setFilter('unanswered', this)">未回答</button>
   <button class="filter-btn" onclick="setFilter('answered', this)">回答済み</button>
+  <div style="margin-left:auto;display:flex;gap:6px;">
+    <button class="filter-btn active" id="sort-asc" onclick="setSort('asc')">古い順</button>
+    <button class="filter-btn" id="sort-desc" onclick="setSort('desc')">新しい順</button>
+  </div>
 </div>
 
 <div class="grid" id="q-grid"><div class="loading">読み込み中...</div></div>
@@ -105,6 +109,14 @@ var allData = [];
 var currentFilter = 'all';
 var pendingDeleteRow = null;
 var pendingDeleteIdx = null;
+var currentSort = 'asc';
+
+function setSort(sort) {
+  currentSort = sort;
+  document.getElementById('sort-asc').classList.toggle('active', sort === 'asc');
+  document.getElementById('sort-desc').classList.toggle('active', sort === 'desc');
+  renderCards();
+}
 
 function showToast(msg) {
   var t = document.getElementById('toast');
@@ -220,6 +232,13 @@ function renderCards() {
   document.getElementById('unanswered-count').textContent = unanswered;
   document.getElementById('answered-count').textContent = allData.length - unanswered;
 
+  // ソート
+  filtered.sort(function(a, b) {
+    var da = new Date(a.time);
+    var db = new Date(b.time);
+    return currentSort === 'asc' ? da - db : db - da;
+  });
+
   if (filtered.length === 0) {
     grid.innerHTML = '<div class="empty">該当する質問はありません</div>';
     return;
@@ -244,7 +263,7 @@ function renderCards() {
     }
 
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">'
-      + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + q.status + '</div>'
+      + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + (isAnswered ? '回答済み' : '新しい質問') + '</div>'
       + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
       + '<div class="q-time">' + timeAgo(q.time) + '</div>'
       + '<div class="divider"></div>'
