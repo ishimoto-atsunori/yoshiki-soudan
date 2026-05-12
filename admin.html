@@ -75,13 +75,13 @@
 
 <div class="stats">
   <div class="stat-card"><div class="stat-num" id="total-count">-</div><div class="stat-label">合計</div></div>
-  <div class="stat-card"><div class="stat-num" id="unanswered-count" style="color:#8B5E00;">-</div><div class="stat-label">未回答</div></div>
+  <div class="stat-card"><div class="stat-num" id="unanswered-count" style="color:#8B5E00;">-</div><div class="stat-label">新しい質問</div></div>
   <div class="stat-card"><div class="stat-num" id="answered-count" style="color:#3B6D11;">-</div><div class="stat-label">回答済み</div></div>
 </div>
 
 <div class="filters" style="flex-wrap:wrap;gap:8px;">
   <button class="filter-btn active" onclick="setFilter('all', this)">すべて</button>
-  <button class="filter-btn" onclick="setFilter('unanswered', this)">未回答</button>
+  <button class="filter-btn" onclick="setFilter('unanswered', this)">新しい質問</button>
   <button class="filter-btn" onclick="setFilter('answered', this)">回答済み</button>
   <div style="margin-left:auto;display:flex;gap:6px;">
     <button class="filter-btn active" id="sort-asc" onclick="setSort('asc')">古い順</button>
