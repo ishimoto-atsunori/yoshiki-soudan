@@ -149,10 +149,16 @@ function escapeHtml(text) {
 
 function gasRequest(params, callback) {
   var url = GAS_URL + '?' + params;
-  var img = new Image();
-  img.onload = function() { if (callback) callback(); };
-  img.onerror = function() { if (callback) callback(); };
-  img.src = url;
+  fetch(url, { method: 'GET', mode: 'no-cors' })
+    .then(function() {
+      setTimeout(function() { if (callback) callback(); }, 500);
+    })
+    .catch(function() {
+      var img = new Image();
+      img.onload = function() { if (callback) callback(); };
+      img.onerror = function() { if (callback) callback(); };
+      img.src = url;
+    });
 }
 
 function saveAnswer(row, idx) {
