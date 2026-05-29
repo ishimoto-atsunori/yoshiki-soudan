@@ -25,15 +25,12 @@
 
   .q-card { background: #fff; border-radius: 14px; padding: 1rem; border: 1px solid #E0D5C5; border-left: 4px solid #C8B99A; display: flex; flex-direction: column; }
   .q-card.answered { border-left-color: #A8C5A0; }
-  .badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; margin-bottom: 8px; }
-  .badge.answered { background: #EAF3DE; color: #3B6D11; }
-  .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
-  .q-time { font-size: 11px; color: #B0A090; margin-bottom: 10px; }
-  .divider { height: 1px; background: #EDE5D8; margin: 8px 0; }
-  .question-box { background: #EDE8DF; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; border-left: 3px solid #A89070; }
+  .question-box { background: #EDE8DF; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border-left: 3px solid #A89070; }
   .question-box-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 5px; }
   .question-box-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; }
-  .is-owner-row { font-size: 11px; color: #7A6A56; margin-bottom: 8px; padding: 2px 0; }
+  .owner-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+  .owner-badge.owner-yes { background: #F4A623; }
+  .owner-badge.owner-no { background: #9E9E9E; }
   .answer-box { background: #EAF3DE; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #A8C5A0; }
   .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
   .answer-text { font-size: 12px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
@@ -129,17 +126,6 @@ function setFilter(filter, btn) {
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   renderCards();
-}
-
-function timeAgo(dateStr) {
-  var now = new Date();
-  var d = new Date(dateStr);
-  if (isNaN(d)) return dateStr;
-  var diff = Math.floor((now - d) / 1000);
-  if (diff < 60) return 'たった今';
-  if (diff < 3600) return Math.floor(diff / 60) + '分前';
-  if (diff < 86400) return Math.floor(diff / 3600) + '時間前';
-  return Math.floor(diff / 86400) + '日前';
 }
 
 function escapeHtml(text) {
@@ -253,17 +239,23 @@ function renderCards() {
     var idx = allData.indexOf(q);
     var isAnswered = q.status === '回答済み';
 
+    // 1. 質問ボックス
     var questionHtml = '<div class="question-box">'
       + '<div class="question-box-label">新しい質問</div>'
       + '<div class="question-box-text">' + escapeHtml(q.question) + '</div>'
       + '</div>';
 
+    // 2. OWNER'S生バッジ（未回答カードのみ）
     var isOwnerHtml = '';
     if (!isAnswered && q.is_owner) {
-      var ownerIcon = (q.is_owner === "OWNER'S生") ? '✅' : '👤';
-      isOwnerHtml = '<div class="is-owner-row">' + ownerIcon + ' ' + escapeHtml(q.is_owner) + '</div>';
+      if (q.is_owner === "OWNER'S生ではありません") {
+        isOwnerHtml = '<div><span class="owner-badge owner-no">👤 OWNER\'S生ではありません</span></div>';
+      } else if (q.is_owner === "OWNER'S生です" || q.is_owner === "OWNER'S生") {
+        isOwnerHtml = '<div><span class="owner-badge owner-yes">✅ OWNER\'S生</span></div>';
+      }
     }
 
+    // 3. 回答入力欄 / 回答表示
     var answerHtml = '';
     if (isAnswered && q.answer) {
       answerHtml = '<div class="answer-box"><div class="answer-label">✅ よしきの回答</div><div class="answer-text">' + escapeHtml(q.answer) + '</div></div>';
@@ -274,11 +266,9 @@ function renderCards() {
         + '</div>';
     }
 
+    // 4. ボタン類
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">'
-      + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + (isAnswered ? '回答済み' : '新しい質問') + '</div>'
       + questionHtml
-      + '<div class="q-time">' + timeAgo(q.time) + '</div>'
-      + '<div class="divider"></div>'
       + isOwnerHtml
       + answerHtml
       + '<div class="card-actions">'
