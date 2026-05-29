@@ -34,6 +34,10 @@
   .answer-box { background: #EAF3DE; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #A8C5A0; }
   .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
   .answer-text { font-size: 12px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
+  .answer-text.collapsed { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+  .answer-text.expanded { display: block; overflow: visible; }
+  .answer-toggle { display: inline-block; margin-top: 6px; padding: 0; border: none; background: none; font-size: 11px; color: #3B6D11; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .answer-toggle:hover { text-decoration: underline; }
   .answer-input-area { margin-bottom: 8px; }
   .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
   textarea.answer-input { width: 100%; min-height: 360px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 8px; font-size: 12px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
@@ -171,6 +175,21 @@ function toggleStatus(row, idx) {
   });
 }
 
+function toggleAnswer(idx) {
+  var el = document.getElementById('answer-text-' + idx);
+  var btn = document.getElementById('answer-toggle-' + idx);
+  if (!el || !btn) return;
+  if (el.classList.contains('collapsed')) {
+    el.classList.remove('collapsed');
+    el.classList.add('expanded');
+    btn.textContent = '閉じる ▲';
+  } else {
+    el.classList.remove('expanded');
+    el.classList.add('collapsed');
+    btn.textContent = '続きを見る ▼';
+  }
+}
+
 function copyText(text) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(function() { showToast('コピーしました'); });
@@ -245,9 +264,9 @@ function renderCards() {
       + '<div class="question-box-text">' + escapeHtml(q.question) + '</div>'
       + '</div>';
 
-    // 2. OWNER'S生バッジ（未回答カードのみ）
+    // 2. OWNER'S生バッジ（未回答・回答済み問わず全カードに表示）
     var isOwnerHtml = '';
-    if (!isAnswered && q.is_owner) {
+    if (q.is_owner) {
       if (q.is_owner === "OWNER'S生ではありません") {
         isOwnerHtml = '<div><span class="owner-badge owner-no">👤 OWNER\'S生ではありません</span></div>';
       } else if (q.is_owner === "OWNER'S生です" || q.is_owner === "OWNER'S生") {
@@ -258,7 +277,11 @@ function renderCards() {
     // 3. 回答入力欄 / 回答表示
     var answerHtml = '';
     if (isAnswered && q.answer) {
-      answerHtml = '<div class="answer-box"><div class="answer-label">✅ よしきの回答</div><div class="answer-text">' + escapeHtml(q.answer) + '</div></div>';
+      answerHtml = '<div class="answer-box">'
+        + '<div class="answer-label">✅ よしきの回答</div>'
+        + '<div class="answer-text collapsed" id="answer-text-' + idx + '">' + escapeHtml(q.answer) + '</div>'
+        + '<button class="answer-toggle" id="answer-toggle-' + idx + '" onclick="toggleAnswer(' + idx + ')">続きを見る ▼</button>'
+        + '</div>';
     } else if (!isAnswered) {
       answerHtml = '<div class="answer-input-area">'
         + '<div class="answer-input-label">最終回答を入力（オプチャ投稿と同じ内容をコピペ）</div>'
