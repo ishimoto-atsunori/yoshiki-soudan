@@ -28,12 +28,12 @@
   .badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; margin-bottom: 8px; }
   .badge.answered { background: #EAF3DE; color: #3B6D11; }
   .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
-  .q-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; margin-bottom: 6px; flex: 1; }
   .q-time { font-size: 11px; color: #B0A090; margin-bottom: 10px; }
   .divider { height: 1px; background: #EDE5D8; margin: 8px 0; }
-  .draft-box { background: #F5F0E8; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #C8B99A; }
-  .draft-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 4px; }
-  .draft-text { font-size: 12px; color: #5A4A3A; line-height: 1.6; word-break: break-all; }
+  .question-box { background: #EDE8DF; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; border-left: 3px solid #A89070; }
+  .question-box-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 5px; }
+  .question-box-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; }
+  .is-owner-row { font-size: 11px; color: #7A6A56; margin-bottom: 8px; padding: 2px 0; }
   .answer-box { background: #EAF3DE; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #A8C5A0; }
   .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
   .answer-text { font-size: 12px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
@@ -45,7 +45,6 @@
   .action-btn { padding: 8px 10px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 11px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
   .action-btn.success { background: #3B6D11; color: #FAF7F2; border-color: #3B6D11; }
-  .action-btn.draft-copy { background: #F0EBE3; color: #8B6F47; border-color: #D0C4B0; }
   .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0C4C0; }
   .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .reload-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; }
@@ -254,9 +253,16 @@ function renderCards() {
     var idx = allData.indexOf(q);
     var isAnswered = q.status === '回答済み';
 
-    var draftHtml = q.draft
-      ? '<div class="draft-box"><div class="draft-label">💡 AIたたき台</div><div class="draft-text">' + escapeHtml(q.draft) + '</div></div>'
-      : '';
+    var questionHtml = '<div class="question-box">'
+      + '<div class="question-box-label">新しい質問</div>'
+      + '<div class="question-box-text">' + escapeHtml(q.question) + '</div>'
+      + '</div>';
+
+    var isOwnerHtml = '';
+    if (!isAnswered && q.is_owner) {
+      var ownerIcon = (q.is_owner === "OWNER'S生") ? '✅' : '👤';
+      isOwnerHtml = '<div class="is-owner-row">' + ownerIcon + ' ' + escapeHtml(q.is_owner) + '</div>';
+    }
 
     var answerHtml = '';
     if (isAnswered && q.answer) {
@@ -270,14 +276,13 @@ function renderCards() {
 
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">'
       + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + (isAnswered ? '回答済み' : '新しい質問') + '</div>'
-      + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
+      + questionHtml
       + '<div class="q-time">' + timeAgo(q.time) + '</div>'
       + '<div class="divider"></div>'
-      + draftHtml
+      + isOwnerHtml
       + answerHtml
       + '<div class="card-actions">'
         + '<button class="action-btn" onclick="copyText(allData[' + idx + '].question)">質問コピー</button>'
-        + (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(allData[' + idx + '].draft)">たたき台コピー</button>' : '')
         + (!isAnswered ? '<button class="action-btn success" id="save-btn-' + idx + '" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '')
         + '<button class="action-btn primary" onclick="toggleStatus(' + q.row + ', ' + idx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>'
         + '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', allData[' + idx + '].question)">削除</button>'

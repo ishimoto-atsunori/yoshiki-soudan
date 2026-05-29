@@ -47,6 +47,26 @@
   .char-count { font-size: 12px; color: #B0A090; text-align: right; margin-top: 6px; }
   .divider { height: 1px; background: #EDE5D8; margin: 1rem 0; }
   .hint { font-size: 13px; color: #7A6A56; line-height: 1.6; }
+  .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .radio-option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid #D0C4B0;
+    border-radius: 10px;
+    background: #FAF7F2;
+    font-size: 14px;
+    color: #3D2E1E;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .radio-option:hover { border-color: #A89070; }
+  .radio-option input[type="radio"] {
+    width: 18px; height: 18px;
+    accent-color: #8B6F47;
+    margin: 0;
+    cursor: pointer;
+  }
+  .radio-option input[type="radio"]:checked + span { color: #8B6F47; font-weight: 600; }
   .submit-btn {
     width: 100%; padding: 14px;
     background: #8B6F47; color: #FAF7F2;
@@ -133,6 +153,21 @@
       <div class="divider"></div>
       <div class="hint">名前の入力は不要です。匿名で送信されます。</div>
     </div>
+
+    <div class="card">
+      <div class="card-label">OWNER'S生ですか？</div>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="is_owner" value="OWNER'S生" onchange="updateSubmitState()">
+          <span>OWNER'S生です</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="is_owner" value="OWNER'S生ではありません" onchange="updateSubmitState()">
+          <span>OWNER'S生ではありません</span>
+        </label>
+      </div>
+    </div>
+
     <button class="submit-btn" id="submit-btn" onclick="submitQuestion()" disabled>送信する</button>
 
     <div class="recent-section">
@@ -159,21 +194,29 @@
 <script>
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwfEQz_rwzxYGu85xuTTecPYvwb76Je3Hg1RkUrGbejH7JPNxZfqQ1tO2n4Hctp7BDMEg/exec';
 
+function updateSubmitState() {
+  var val = document.getElementById('q-input').value;
+  var isOwner = document.querySelector('input[name="is_owner"]:checked');
+  document.getElementById('submit-btn').disabled = (val.trim().length === 0) || !isOwner;
+}
+
 function updateCount() {
   var val = document.getElementById('q-input').value;
   document.getElementById('char-num').textContent = val.length;
-  document.getElementById('submit-btn').disabled = val.trim().length === 0;
+  updateSubmitState();
 }
 
 function submitQuestion() {
   var val = document.getElementById('q-input').value.trim();
-  if (!val) return;
+  var isOwnerEl = document.querySelector('input[name="is_owner"]:checked');
+  if (!val || !isOwnerEl) return;
+  var isOwner = isOwnerEl.value;
   var btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.textContent = '送信中...';
 
   var img = new Image();
-  img.src = GAS_URL + '?question=' + encodeURIComponent(val);
+  img.src = GAS_URL + '?question=' + encodeURIComponent(val) + '&is_owner=' + encodeURIComponent(isOwner);
 
   setTimeout(function() {
     document.getElementById('form-view').style.display = 'none';
@@ -185,6 +228,7 @@ function submitQuestion() {
 function resetForm() {
   document.getElementById('q-input').value = '';
   document.getElementById('char-num').textContent = '0';
+  document.querySelectorAll('input[name="is_owner"]').forEach(function(r) { r.checked = false; });
   document.getElementById('submit-btn').disabled = true;
   document.getElementById('submit-btn').textContent = '送信する';
   document.getElementById('form-view').style.display = 'block';
