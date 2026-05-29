@@ -67,6 +67,25 @@
     cursor: pointer;
   }
   .radio-option input[type="radio"]:checked + span { color: #8B6F47; font-weight: 600; }
+  .checkbox-option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px;
+    border: 1px solid #D0C4B0;
+    border-radius: 10px;
+    background: #FAF7F2;
+    font-size: 14px;
+    color: #3D2E1E;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .checkbox-option:hover { border-color: #A89070; }
+  .checkbox-option input[type="checkbox"] {
+    width: 22px; height: 22px;
+    accent-color: #8B6F47;
+    margin: 0; flex-shrink: 0;
+    cursor: pointer;
+  }
+  .checkbox-option input[type="checkbox"]:checked ~ span { color: #8B6F47; font-weight: 600; }
   .submit-btn {
     width: 100%; padding: 14px;
     background: #8B6F47; color: #FAF7F2;
@@ -155,17 +174,10 @@
     </div>
 
     <div class="card">
-      <div class="card-label">OWNER'S生ですか？</div>
-      <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="is_owner" value="OWNER'S生" onchange="updateSubmitState()">
-          <span>OWNER'S生です</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="is_owner" value="OWNER'S生ではありません" onchange="updateSubmitState()">
-          <span>OWNER'S生ではありません</span>
-        </label>
-      </div>
+      <label class="checkbox-option">
+        <input type="checkbox" id="is-owner-check">
+        <span>OWNER'S生の方はこちらにチェックをしてください</span>
+      </label>
     </div>
 
     <button class="submit-btn" id="submit-btn" onclick="submitQuestion()" disabled>送信する</button>
@@ -196,8 +208,7 @@ var GAS_URL = 'https://script.google.com/macros/s/AKfycbzbarRBgP5sUVoo6qMJEFjqFU
 
 function updateSubmitState() {
   var val = document.getElementById('q-input').value;
-  var isOwner = document.querySelector('input[name="is_owner"]:checked');
-  document.getElementById('submit-btn').disabled = (val.trim().length === 0) || !isOwner;
+  document.getElementById('submit-btn').disabled = (val.trim().length === 0);
 }
 
 function updateCount() {
@@ -208,9 +219,8 @@ function updateCount() {
 
 function submitQuestion() {
   var val = document.getElementById('q-input').value.trim();
-  var isOwnerEl = document.querySelector('input[name="is_owner"]:checked');
-  if (!val || !isOwnerEl) return;
-  var isOwner = isOwnerEl.value;
+  if (!val) return;
+  var isOwner = document.getElementById('is-owner-check').checked ? "OWNER'S生です" : "OWNER'S生ではありません";
   var btn = document.getElementById('submit-btn');
   btn.disabled = true;
   btn.textContent = '送信中...';
@@ -228,7 +238,7 @@ function submitQuestion() {
 function resetForm() {
   document.getElementById('q-input').value = '';
   document.getElementById('char-num').textContent = '0';
-  document.querySelectorAll('input[name="is_owner"]').forEach(function(r) { r.checked = false; });
+  document.getElementById('is-owner-check').checked = false;
   document.getElementById('submit-btn').disabled = true;
   document.getElementById('submit-btn').textContent = '送信する';
   document.getElementById('form-view').style.display = 'block';
