@@ -7,45 +7,45 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif; background: #F5F0E8; min-height: 100vh; padding: 1.25rem 1rem; }
-  .header { max-width: 900px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+  .header { max-width: 860px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: space-between; }
   .header-title { font-size: 16px; font-weight: 600; color: #3D2E1E; }
   .header-sub { font-size: 12px; color: #7A6A56; margin-top: 2px; }
-  .stats { max-width: 900px; margin: 0 auto 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stats { max-width: 860px; margin: 0 auto 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat-card { background: #fff; border-radius: 12px; padding: 0.875rem 0.5rem; text-align: center; border: 1px solid #E0D5C5; }
   .stat-num { font-size: 26px; font-weight: 600; color: #3D2E1E; }
   .stat-label { font-size: 11px; color: #7A6A56; margin-top: 3px; }
-  .filters { max-width: 900px; margin: 0 auto 1rem; display: flex; gap: 8px; }
+  .filters { max-width: 860px; margin: 0 auto 1rem; display: flex; gap: 8px; }
   .filter-btn { padding: 7px 16px; border-radius: 20px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .filter-btn.active { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
 
-  /* グリッド：スマホ1列、タブレット2列、PC3列 */
-  .grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 10px; }
+  /* グリッド：スマホ1列、タブレット2列、PC2列 */
+  .grid { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 10px; }
   @media (min-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 860px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 860px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
   .q-card { background: #fff; border-radius: 14px; padding: 1rem; border: 1px solid #E0D5C5; border-left: 4px solid #C8B99A; display: flex; flex-direction: column; }
   .q-card.answered { border-left-color: #A8C5A0; }
-  .question-box { background: #EDE8DF; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; border-left: 3px solid #A89070; }
-  .question-box-label { font-size: 10px; color: #8B6F47; font-weight: 600; margin-bottom: 5px; }
-  .question-box-text { font-size: 14px; color: #3D2E1E; line-height: 1.7; word-break: break-all; }
-  .owner-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 10px; }
-  .owner-badge.owner-yes { background: #F4A623; }
-  .owner-badge.owner-no { background: #9E9E9E; }
+  .badge { display: inline-block; font-size: 13px; padding: 3px 10px; border-radius: 20px; font-weight: 600; margin-bottom: 8px; }
+  .badge.answered { background: #EAF3DE; color: #3B6D11; }
+  .badge.unanswered { background: #FFF3E0; color: #8B5E00; }
+  .q-text { font-size: 17px; color: #3D2E1E; line-height: 1.7; word-break: break-all; margin-bottom: 6px; flex: 1; }
+  .q-time { font-size: 13px; color: #B0A090; margin-bottom: 10px; }
+  .divider { height: 1px; background: #EDE5D8; margin: 8px 0; }
+  .draft-box { background: #F5F0E8; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #C8B99A; }
+  .draft-label { font-size: 12px; color: #8B6F47; font-weight: 600; margin-bottom: 4px; }
+  .draft-text { font-size: 15px; color: #5A4A3A; line-height: 1.6; word-break: break-all; }
   .answer-box { background: #EAF3DE; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; border-left: 3px solid #A8C5A0; }
-  .answer-label { font-size: 10px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
-  .answer-text { font-size: 12px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
-  .answer-text.collapsed { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-  .answer-text.expanded { display: block; overflow: visible; }
-  .answer-toggle { display: inline-block; margin-top: 6px; padding: 0; border: none; background: none; font-size: 11px; color: #3B6D11; font-weight: 600; cursor: pointer; font-family: inherit; }
-  .answer-toggle:hover { text-decoration: underline; }
+  .answer-label { font-size: 12px; color: #3B6D11; font-weight: 600; margin-bottom: 4px; }
+  .answer-text { font-size: 15px; color: #2A4A20; line-height: 1.6; word-break: break-all; }
   .answer-input-area { margin-bottom: 8px; }
-  .answer-input-label { font-size: 11px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
-  textarea.answer-input { width: 100%; min-height: 360px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 8px; font-size: 12px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
+  .answer-input-label { font-size: 13px; color: #7A6A56; margin-bottom: 4px; font-weight: 600; }
+  textarea.answer-input { width: 100%; min-height: 360px; border: 1px solid #D0C4B0; border-radius: 8px; padding: 8px; font-size: 15px; font-family: inherit; color: #3D2E1E; background: #FAF7F2; resize: none; line-height: 1.6; outline: none; }
   textarea.answer-input:focus { border-color: #A89070; }
   .card-actions { display: flex; gap: 5px; flex-wrap: wrap; margin-top: auto; }
-  .action-btn { padding: 8px 10px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 11px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .action-btn { padding: 8px 10px; border-radius: 8px; border: 1px solid #D0C4B0; background: #FAF7F2; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .action-btn.primary { background: #8B6F47; color: #FAF7F2; border-color: #8B6F47; }
   .action-btn.success { background: #3B6D11; color: #FAF7F2; border-color: #3B6D11; }
+  .action-btn.draft-copy { background: #F0EBE3; color: #8B6F47; border-color: #D0C4B0; }
   .action-btn.danger { background: #fff; color: #C0392B; border-color: #E0C4C0; }
   .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .reload-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #D0C4B0; background: #fff; font-size: 13px; color: #7A6A56; cursor: pointer; font-family: inherit; }
@@ -104,7 +104,7 @@
 </div>
 
 <script>
-var GAS_URL = 'https://script.google.com/macros/s/AKfycbzbarRBgP5sUVoo6qMJEFjqFUBHdcGuOCRwYQy74F4kufGLEOF0aVcGhdoY0BvhMiPO4w/exec';
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbwfEQz_rwzxYGu85xuTTecPYvwb76Je3Hg1RkUrGbejH7JPNxZfqQ1tO2n4Hctp7BDMEg/exec';
 var allData = [];
 var currentFilter = 'all';
 var pendingDeleteRow = null;
@@ -130,6 +130,17 @@ function setFilter(filter, btn) {
   document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
   renderCards();
+}
+
+function timeAgo(dateStr) {
+  var now = new Date();
+  var d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  var diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return 'たった今';
+  if (diff < 3600) return Math.floor(diff / 60) + '分前';
+  if (diff < 86400) return Math.floor(diff / 3600) + '時間前';
+  return Math.floor(diff / 86400) + '日前';
 }
 
 function escapeHtml(text) {
@@ -173,21 +184,6 @@ function toggleStatus(row, idx) {
     renderCards();
     showToast(newStatus === '回答済み' ? '回答済みにしました' : '未回答に戻しました');
   });
-}
-
-function toggleAnswer(idx) {
-  var el = document.getElementById('answer-text-' + idx);
-  var btn = document.getElementById('answer-toggle-' + idx);
-  if (!el || !btn) return;
-  if (el.classList.contains('collapsed')) {
-    el.classList.remove('collapsed');
-    el.classList.add('expanded');
-    btn.textContent = '閉じる ▲';
-  } else {
-    el.classList.remove('expanded');
-    el.classList.add('collapsed');
-    btn.textContent = '続きを見る ▼';
-  }
 }
 
 function copyText(text) {
@@ -258,30 +254,13 @@ function renderCards() {
     var idx = allData.indexOf(q);
     var isAnswered = q.status === '回答済み';
 
-    // 1. 質問ボックス
-    var questionHtml = '<div class="question-box">'
-      + '<div class="question-box-label">新しい質問</div>'
-      + '<div class="question-box-text">' + escapeHtml(q.question) + '</div>'
-      + '</div>';
+    var draftHtml = q.draft
+      ? '<div class="draft-box"><div class="draft-label">💡 AIたたき台</div><div class="draft-text">' + escapeHtml(q.draft) + '</div></div>'
+      : '';
 
-    // 2. OWNER'S生バッジ（未回答・回答済み問わず全カードに表示）
-    var isOwnerHtml = '';
-    if (q.is_owner) {
-      if (q.is_owner === "OWNER'S生ではありません") {
-        isOwnerHtml = '<div><span class="owner-badge owner-no">👤 OWNER\'S生ではありません</span></div>';
-      } else if (q.is_owner === "OWNER'S生です" || q.is_owner === "OWNER'S生") {
-        isOwnerHtml = '<div><span class="owner-badge owner-yes">✅ OWNER\'S生</span></div>';
-      }
-    }
-
-    // 3. 回答入力欄 / 回答表示
     var answerHtml = '';
     if (isAnswered && q.answer) {
-      answerHtml = '<div class="answer-box">'
-        + '<div class="answer-label">✅ よしきの回答</div>'
-        + '<div class="answer-text collapsed" id="answer-text-' + idx + '">' + escapeHtml(q.answer) + '</div>'
-        + '<button class="answer-toggle" id="answer-toggle-' + idx + '" onclick="toggleAnswer(' + idx + ')">続きを見る ▼</button>'
-        + '</div>';
+      answerHtml = '<div class="answer-box"><div class="answer-label">✅ よしきの回答</div><div class="answer-text">' + escapeHtml(q.answer) + '</div></div>';
     } else if (!isAnswered) {
       answerHtml = '<div class="answer-input-area">'
         + '<div class="answer-input-label">最終回答を入力（オプチャ投稿と同じ内容をコピペ）</div>'
@@ -289,13 +268,16 @@ function renderCards() {
         + '</div>';
     }
 
-    // 4. ボタン類
     return '<div class="q-card ' + (isAnswered ? 'answered' : '') + '">'
-      + questionHtml
-      + isOwnerHtml
+      + '<div class="badge ' + (isAnswered ? 'answered' : 'unanswered') + '">' + (isAnswered ? '回答済み' : '新しい質問') + '</div>'
+      + '<div class="q-text">' + escapeHtml(q.question) + '</div>'
+      + '<div class="q-time">' + timeAgo(q.time) + '</div>'
+      + '<div class="divider"></div>'
+      + draftHtml
       + answerHtml
       + '<div class="card-actions">'
         + '<button class="action-btn" onclick="copyText(allData[' + idx + '].question)">質問コピー</button>'
+        + (q.draft ? '<button class="action-btn draft-copy" onclick="copyText(allData[' + idx + '].draft)">たたき台コピー</button>' : '')
         + (!isAnswered ? '<button class="action-btn success" id="save-btn-' + idx + '" onclick="saveAnswer(' + q.row + ', ' + idx + ')">回答を保存する</button>' : '')
         + '<button class="action-btn primary" onclick="toggleStatus(' + q.row + ', ' + idx + ')">' + (isAnswered ? '未回答に戻す' : '回答済みにする') + '</button>'
         + '<button class="action-btn danger" onclick="confirmDelete(' + q.row + ', ' + idx + ', allData[' + idx + '].question)">削除</button>'
